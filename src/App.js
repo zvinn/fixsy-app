@@ -1,9 +1,10 @@
-/* src/App.js - النسخة النهائية الخالية من الأخطاء (شاملة كل الميزات) */
+/* src/App.js - النسخة الكاملة والمصححة 100% */
 import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
 import { db, auth } from './firebase'; 
 import { signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "firebase/auth";
-import { collection, getDocs, addDoc, query, where } from 'firebase/firestore';
+// 👇 تم إضافة onSnapshot هنا 👇
+import { collection, getDocs, addDoc, query, where, onSnapshot } from 'firebase/firestore';
 import toast, { Toaster } from 'react-hot-toast';
 import gsap from 'gsap';
 import { Home, Store, ClipboardList, Zap, ShieldCheck, User, LogIn, Search, MapPin, Wrench, Camera, MessageCircle, Tag } from 'lucide-react';
@@ -14,14 +15,15 @@ import AdminPanel from './AdminPanel';
 import Profile from './Profile';
 import JobMarket from './JobMarket';
 import LegalPages from './LegalPages';
+import Notifications from './Notifications';
 
 function App() {
   const [user, setUser] = useState(null);
   const [userRole, setUserRole] = useState(null);
-  
-  // 👇 المتغير الوحيد للتحكم في الصفحات 👇
   const [activeTab, setActiveTab] = useState('home'); 
+  const [unreadCount, setUnreadCount] = useState(0);
 
+  // 👇 تعريف الـ Refs عشان الأنيميشن يشتغل 👇
   const heroRef = useRef(null);
   const servicesRef = useRef(null);
   const techsRef = useRef(null);
@@ -36,11 +38,9 @@ function App() {
   const [newTechData, setNewTechData] = useState({ specialty: 'سباكة', price: '' });
   const [problemFile, setProblemFile] = useState(null);
   
-  // الكوبونات
   const [couponCode, setCouponCode] = useState("");
   const [discount, setDiscount] = useState(0);
 
-  // AI
   const [showAIModal, setShowAIModal] = useState(false);
   const [aiQuery, setAiQuery] = useState("");
   const [aiResult, setAiResult] = useState(null);
@@ -80,6 +80,16 @@ function App() {
     return () => unsubscribe();
   }, []);
 
+  // مراقبة الإشعارات
+  useEffect(() => {
+      if (!user) return;
+      const q = query(collection(db, "notifications"), where("userId", "==", user.email), where("read", "==", false));
+      const unsubscribe = onSnapshot(q, (snapshot) => {
+          setUnreadCount(snapshot.size);
+      });
+      return () => unsubscribe();
+  }, [user]);
+
   const handleGoogleLogin = async () => {
     const provider = new GoogleAuthProvider();
     provider.setCustomParameters({ prompt: 'select_account' });
@@ -117,7 +127,7 @@ function App() {
   const handleLogout = () => {
     signOut(auth);
     setUser(null); setUserRole(null); 
-    setActiveTab('home'); // 👇 رجوع للرئيسية
+    setActiveTab('home');
     toast("تم الخروج");
   };
 
@@ -169,15 +179,13 @@ function App() {
   const handleBookingSubmit = async (e) => {
     e.preventDefault();
     if(!user) return toast.error("سجل دخولك الأول!");
-    
     const appointmentTime = formData.scheduledTime || new Date().toISOString();
     const finalPrice = Math.max(0, (selectedTech.price || 0) - discount);
-
     const loadingToast = toast.loading("جاري الحجز...");
     try {
       let imageUrl = null;
       if (problemFile) imageUrl = await uploadImage(problemFile);
-
+      
       await addDoc(collection(db, "requests"), {
         technician_name: selectedTech.name, technician_email: selectedTech.email,
         client_name: user.displayName, client_email: user.email,
@@ -186,6 +194,14 @@ function App() {
         original_price: selectedTech.price, discount: discount, price: finalPrice, coupon_used: discount > 0 ? couponCode : null,
         status: "pending", scheduledDate: appointmentTime, date: new Date().toISOString()
       });
+      // إشعار للفني
+      if (selectedTech.email) {
+          await addDoc(collection(db, "notifications"), {
+              userId: selectedTech.email,
+              message: `🎉 طلب حجز جديد من ${user.displayName}`,
+              icon: "🆕", date: new Date().toISOString(), read: false
+          });
+      }
       toast.dismiss(loadingToast); toast.success("تم الحجز بنجاح! 🎉");
       setSelectedTech(null); setFormData({ address: '', problem: '', location: null, scheduledTime: '' }); setProblemFile(null); setCouponCode(""); setDiscount(0);
       setActiveTab('my_requests');
@@ -196,7 +212,7 @@ function App() {
     if (!aiQuery) return toast.error("اكتب وصف المشكلة");
     const text = aiQuery.toLowerCase();
     let suggestion = null;
-    if (text.match(/ميه|مية|حنفية|حوض|تسريب|بلاعة|سباكة|مواسير/)) suggestion = { type: 'سباكة', icon: '🚿', advice: 'مشكلة سباكة. اقفل المحبس الرئيسي.' };
+    if (text.match(/ميه|مية|حنفية|حوض|تسريب|بلاعة|سباكة|مواسير/)) suggestion = { type: 'سباكة', icon: '🚿', advice: 'غالباً دي مشكلة سباكة.' };
     else if (text.match(/نور|لمبة|فيشة|سلك|كهرباء|قفلة|مفتاح/)) suggestion = { type: 'كهرباء', icon: '💡', advice: 'افصل الكهرباء فوراً.' };
     else if (text.match(/خشب|باب|شباك|سرير|دولاب|نجار|كسر/)) suggestion = { type: 'نجارة', icon: '🪑', advice: 'احتفظ بالأجزاء المكسورة.' };
     else if (text.match(/تكييف|سخن|بارد|فريون|تنقيط|صوت/)) suggestion = { type: 'تكييف', icon: '❄️', advice: 'افصل التكييف ونظف الفلاتر.' };
@@ -239,6 +255,7 @@ function App() {
         case 'admin': return <AdminPanel goBack={() => setActiveTab('home')} />;
         case 'about': return <LegalPages page="about" goBack={() => setActiveTab('profile')} />;
         case 'privacy': return <LegalPages page="privacy" goBack={() => setActiveTab('profile')} />;
+        case 'notifications': return <Notifications user={user} goBack={() => setActiveTab('home')} />;
         default: return (
             <>
               <header className="hero hero-anim" ref={heroRef}>
@@ -298,26 +315,23 @@ function App() {
           <div className="modal-content">
             <button className="close-btn" onClick={() => setSelectedTech(null)}>✕</button>
             <h3>حجز مع {selectedTech.name}</h3>
+            
+            <div style={{marginBottom:'15px', padding:'15px', background:'#F8FAFC', borderRadius:'15px', border:'1px solid #e2e8f0'}}>
+                 <div style={{display:'flex', justifyContent:'space-between', color:'#64748b'}}><span>السعر الأساسي:</span><span style={{textDecoration: discount > 0 ? 'line-through' : 'none'}}>{selectedTech.price || 0} ج.م</span></div>
+                 {discount > 0 && <div style={{display:'flex', justifyContent:'space-between', color:'#EF4444', marginTop:'5px'}}><span>خصم الكوبون:</span><span>-{discount} ج.م</span></div>}
+                 <div style={{borderTop:'1px solid #e2e8f0', marginTop:'5px', paddingTop:'5px', display:'flex', justifyContent:'space-between', fontWeight:'bold', fontSize:'1.1rem'}}><span>الإجمالي:</span><span style={{color:'#10B981'}}>{Math.max(0, (selectedTech.price || 0) - discount)} ج.م</span></div>
+            </div>
+
             {!user ? <button onClick={handleGoogleLogin} className="submit-btn" style={{background:'#4285F4'}}>دخول بجوجل</button> : 
              (userRole === 'client' || userRole === 'admin') ? (
                 <form onSubmit={handleBookingSubmit}>
-                    <div style={{marginBottom:'15px', padding:'15px', background:'#F8FAFC', borderRadius:'15px', border:'1px solid #e2e8f0'}}>
-                        <div style={{display:'flex', justifyContent:'space-between', color:'#64748b'}}><span>السعر الأساسي:</span><span style={{textDecoration: discount > 0 ? 'line-through' : 'none'}}>{selectedTech.price || 0} ج.م</span></div>
-                        {discount > 0 && <div style={{display:'flex', justifyContent:'space-between', color:'#EF4444', marginTop:'5px'}}><span>خصم الكوبون:</span><span>-{discount} ج.م</span></div>}
-                        <div style={{display:'flex', justifyContent:'space-between', fontWeight:'bold', fontSize:'1.1rem', marginTop:'10px', borderTop:'1px solid #e2e8f0', paddingTop:'10px'}}><span>الإجمالي:</span><span style={{color:'#10B981'}}>{Math.max(0, (selectedTech.price || 0) - discount)} ج.م</span></div>
-                    </div>
-
                     <button type="button" onClick={getCurrentLocation} style={{background:'#3B82F6', color:'white', border:'none', padding:'10px', borderRadius:'10px', width:'100%', marginBottom:'10px', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', gap:'5px'}}><MapPin size={16} /> استخدم موقعي الحالي</button>
                     <input type="text" placeholder="أو اكتب العنوان" className="form-input" value={formData.address} onChange={e => setFormData({...formData, address: e.target.value})} />
                     <textarea placeholder="وصف المشكلة..." className="form-input" rows="3" value={formData.problem} onChange={e => setFormData({...formData, problem: e.target.value})} ></textarea>
-                    
-                    <div style={{margin:'10px 0'}}><label style={{display:'block', color:'#666', marginBottom:'5px', fontSize:'0.9rem'}}>📅 موعد الزيارة</label><input type="datetime-local" className="form-input" value={formData.scheduledTime} onChange={e => setFormData({...formData, scheduledTime: e.target.value})} style={{marginTop:0}} /></div>
+                    <div style={{margin:'10px 0'}}><label style={{display:'block', color:'#666', marginBottom:'5px', fontSize:'0.9rem'}}>📅 موعد الزيارة (اختياري)</label><input type="datetime-local" className="form-input" value={formData.scheduledTime} onChange={e => setFormData({...formData, scheduledTime: e.target.value})} style={{marginTop:0}} /></div>
                     
                     <div style={{display:'flex', gap:'10px', marginBottom:'15px'}}>
-                        <div style={{position:'relative', flex:1}}>
-                            <Tag size={18} style={{position:'absolute', top:'14px', left:'10px', color:'#94a3b8'}} />
-                            <input type="text" placeholder="كود الخصم" className="form-input" style={{margin:0, paddingLeft:'35px'}} value={couponCode} onChange={e => setCouponCode(e.target.value)} />
-                        </div>
+                        <div style={{position:'relative', flex:1}}><Tag size={18} style={{position:'absolute', top:'14px', left:'10px', color:'#94a3b8'}} /><input type="text" placeholder="كود الخصم" className="form-input" style={{margin:0, paddingLeft:'35px'}} value={couponCode} onChange={e => setCouponCode(e.target.value)} /></div>
                         <button type="button" onClick={applyCoupon} style={{background:'#F59E0B', color:'white', border:'none', padding:'0 20px', borderRadius:'12px', cursor:'pointer', fontWeight:'bold'}}>تطبيق</button>
                     </div>
                     
@@ -332,43 +346,31 @@ function App() {
       <nav className="header" style={{justifyContent:'center'}}><h2>Fixsy 🛠️</h2></nav>
       <div style={{paddingBottom: '80px'}}>{renderContent()}</div>
       
-      {/* 👇👇 الشريط السفلي السليم (بيستخدم activeTab بس) 👇👇 */}
+      {/* 👇👇 الشريط السفلي السليم والمثبت 👇👇 */}
       <div className="bottom-nav-container" style={{position: 'fixed', bottom: 0, left: 0, right: 0, backgroundColor: 'white', display: 'flex', justifyContent: 'space-around', alignItems: 'center', padding: '12px 0', boxShadow: '0 -4px 20px rgba(0,0,0,0.08)', zIndex: 99999, borderTopLeftRadius: '20px', borderTopRightRadius: '20px'}}>
         <button onClick={() => setActiveTab('home')} style={{background: 'none', border: 'none', display: 'flex', flexDirection: 'column', alignItems: 'center', color: activeTab === 'home' ? '#0056D2' : '#94a3b8', cursor: 'pointer'}}>
             <Home size={24} strokeWidth={activeTab === 'home' ? 2.5 : 2} />
             <span style={{fontSize: '0.65rem', marginTop:'2px', fontWeight: activeTab === 'home' ? 'bold' : 'normal'}}>الرئيسية</span>
         </button>
-        
         <button onClick={() => setActiveTab('market')} style={{background: 'none', border: 'none', display: 'flex', flexDirection: 'column', alignItems: 'center', color: activeTab === 'market' ? '#0056D2' : '#94a3b8', cursor: 'pointer'}}>
             <Store size={24} strokeWidth={activeTab === 'market' ? 2.5 : 2} />
             <span style={{fontSize: '0.65rem', marginTop:'2px', fontWeight: activeTab === 'market' ? 'bold' : 'normal'}}>السوق</span>
         </button>
         
-        {(userRole === 'client' || userRole === 'admin') && (
-            <button onClick={() => setActiveTab('my_requests')} style={{background: 'none', border: 'none', display: 'flex', flexDirection: 'column', alignItems: 'center', color: activeTab === 'my_requests' ? '#0056D2' : '#94a3b8', cursor: 'pointer'}}>
-                <ClipboardList size={24} strokeWidth={activeTab === 'my_requests' ? 2.5 : 2} />
-                <span style={{fontSize: '0.65rem', marginTop:'2px', fontWeight: activeTab === 'my_requests' ? 'bold' : 'normal'}}>طلباتي</span>
+        {user && (
+            <button onClick={() => setActiveTab('notifications')} style={{background: 'none', border: 'none', display: 'flex', flexDirection: 'column', alignItems: 'center', color: activeTab === 'notifications' ? '#0056D2' : '#94a3b8', cursor: 'pointer', position:'relative'}}>
+                <div style={{position:'relative'}}>
+                    <MessageCircle size={24} strokeWidth={activeTab === 'notifications' ? 2.5 : 2} />
+                    {unreadCount > 0 && <span style={{position:'absolute', top:'-5px', right:'-5px', background:'red', color:'white', borderRadius:'50%', width:'16px', height:'16px', fontSize:'0.65rem', display:'flex', justifyContent:'center', alignItems:'center'}}>{unreadCount}</span>}
+                </div>
+                <span style={{fontSize: '0.65rem', marginTop:'2px', fontWeight: activeTab === 'notifications' ? 'bold' : 'normal'}}>إشعارات</span>
             </button>
         )}
 
-        {(userRole === 'tech' || userRole === 'admin') && (
-            <button onClick={() => setActiveTab('tech_panel')} style={{background: 'none', border: 'none', display: 'flex', flexDirection: 'column', alignItems: 'center', color: activeTab === 'tech_panel' ? '#0056D2' : '#94a3b8', cursor: 'pointer'}}>
-                <Zap size={24} strokeWidth={activeTab === 'tech_panel' ? 2.5 : 2} />
-                <span style={{fontSize: '0.65rem', marginTop:'2px', fontWeight: activeTab === 'tech_panel' ? 'bold' : 'normal'}}>مهامي</span>
-            </button>
-        )}
-
-        {userRole === 'admin' && (
-            <button onClick={() => setActiveTab('admin')} style={{background: 'none', border: 'none', display: 'flex', flexDirection: 'column', alignItems: 'center', color: activeTab === 'admin' ? '#DC2626' : '#94a3b8', cursor: 'pointer'}}>
-                <ShieldCheck size={24} strokeWidth={activeTab === 'admin' ? 2.5 : 2} />
-                <span style={{fontSize: '0.65rem', marginTop:'2px', fontWeight: activeTab === 'admin' ? 'bold' : 'normal'}}>الإدارة</span>
-            </button>
-        )}
-
-        <button onClick={() => user ? setActiveTab('profile') : handleGoogleLogin()} style={{background: 'none', border: 'none', display: 'flex', flexDirection: 'column', alignItems: 'center', color: activeTab === 'profile' ? '#0056D2' : '#94a3b8', cursor: 'pointer'}}>
-            {user ? <User size={24} strokeWidth={activeTab === 'profile' ? 2.5 : 2} /> : <LogIn size={24} />}
-            <span style={{fontSize: '0.65rem', marginTop:'2px', fontWeight: activeTab === 'profile' ? 'bold' : 'normal'}}>{user ? 'حسابي' : 'دخول'}</span>
-        </button>
+        {(userRole === 'client' || userRole === 'admin') && <button onClick={() => setActiveTab('my_requests')} style={{background: 'none', border: 'none', display: 'flex', flexDirection: 'column', alignItems: 'center', color: activeTab === 'my_requests' ? '#0056D2' : '#94a3b8', cursor: 'pointer'}}><ClipboardList size={24} strokeWidth={activeTab === 'my_requests' ? 2.5 : 2} /><span style={{fontSize: '0.65rem', marginTop:'2px', fontWeight: activeTab === 'my_requests' ? 'bold' : 'normal'}}>طلباتي</span></button>}
+        {(userRole === 'tech' || userRole === 'admin') && <button onClick={() => setActiveTab('tech_panel')} style={{background: 'none', border: 'none', display: 'flex', flexDirection: 'column', alignItems: 'center', color: activeTab === 'tech_panel' ? '#0056D2' : '#94a3b8', cursor: 'pointer'}}><Zap size={24} strokeWidth={activeTab === 'tech_panel' ? 2.5 : 2} /><span style={{fontSize: '0.65rem', marginTop:'2px', fontWeight: activeTab === 'tech_panel' ? 'bold' : 'normal'}}>مهامي</span></button>}
+        {userRole === 'admin' && <button onClick={() => setActiveTab('admin')} style={{background: 'none', border: 'none', display: 'flex', flexDirection: 'column', alignItems: 'center', color: activeTab === 'admin' ? '#DC2626' : '#94a3b8', cursor: 'pointer'}}><ShieldCheck size={24} strokeWidth={activeTab === 'admin' ? 2.5 : 2} /><span style={{fontSize: '0.65rem', marginTop:'2px', fontWeight: activeTab === 'admin' ? 'bold' : 'normal'}}>الإدارة</span></button>}
+        <button onClick={() => user ? setActiveTab('profile') : handleGoogleLogin()} style={{background: 'none', border: 'none', display: 'flex', flexDirection: 'column', alignItems: 'center', color: activeTab === 'profile' ? '#0056D2' : '#94a3b8', cursor: 'pointer'}}>{user ? <User size={24} strokeWidth={activeTab === 'profile' ? 2.5 : 2} /> : <LogIn size={24} />}<span style={{fontSize: '0.65rem', marginTop:'2px', fontWeight: activeTab === 'profile' ? 'bold' : 'normal'}}>{user ? 'حسابي' : 'دخول'}</span></button>
       </div>
     </div>
   );
