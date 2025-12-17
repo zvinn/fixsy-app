@@ -1,0 +1,42 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+    function isTech() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'tech';
+    }
+
+    // Clients (Users)
+    match /clients/{userId} {
+      allow read: if isAuthenticated() && isOwner(userId);
+      allow write: if isAuthenticated() && isOwner(userId);
+    }
+
+    // Technicians (Public Profile, Private Data)
+    match /technicians/{userId} {
+      allow read: if true; // Public profiles
+      allow write: if isAuthenticated() && isOwner(userId);
+    }
+
+    // Bookings
+    match /bookings/{bookingId} {
+      allow read: if isAuthenticated() && (resource.data.clientId == request.auth.uid || resource.data.techId == request.auth.uid);
+      allow create: if isAuthenticated();
+      allow update: if isAuthenticated() && (resource.data.clientId == request.auth.uid || resource.data.techId == request.auth.uid);
+    }
+
+    // Tech Stories
+    match /stories/{storyId} {
+      allow read: if true;
+      allow create: if isAuthenticated(); // Techs only in app logic, but rules allow auth users for now
+      allow delete: if isAuthenticated() && resource.data.techId == request.auth.uid;
+    }
+  }
+}

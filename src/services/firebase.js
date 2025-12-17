@@ -1,7 +1,8 @@
-// src/firebase.js
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
+import { getMessaging, getToken } from "firebase/messaging";
+import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAnHVuBwkFiHgUihFvFpf3SwNNbfPjRIhc",
@@ -15,5 +16,12 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
+let messaging = null;
+// try {
+//   messaging = getMessaging(app);
+// } catch (error) {
+//   console.warn("Firebase Messaging not supported (HTTP).", error);
+// }
+const storage = getStorage(app);
 
-export { db, auth };
+export { db, auth, messaging, getToken, storage };
