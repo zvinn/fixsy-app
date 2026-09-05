@@ -129,14 +129,14 @@ function JobMarket({ user, userRole, goBack }) {
             <PlusCircle size={22} color="#2563EB" /> {t("requestQuote")}
           </h3>
           <form onSubmit={postJob} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-            <div style={{ display: 'flex', gap: '15px' }}>
-              <input placeholder={t("titlePlaceholder")} value={newJob.title} onChange={e => setNewJob({ ...newJob, title: e.target.value })} style={{ flex: 2, padding: '14px', borderRadius: '14px', border: '1px solid #CBD5E1', fontSize: '1rem', outline: 'none', transition: '0.2s', background: '#F8FAFC' }} />
-              <input type="number" placeholder={t("budget")} value={newJob.budget} onChange={e => setNewJob({ ...newJob, budget: e.target.value })} style={{ flex: 1, padding: '14px', borderRadius: '14px', border: '1px solid #CBD5E1', fontSize: '1rem', outline: 'none', background: '#F8FAFC' }} />
+            <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap' }}>
+              <input placeholder={t("titlePlaceholder")} value={newJob.title} onChange={e => setNewJob({ ...newJob, title: e.target.value })} style={{ flex: '1 1 200px', padding: '14px', borderRadius: '14px', border: '1px solid #CBD5E1', fontSize: '1rem', outline: 'none', transition: '0.2s', background: '#F8FAFC' }} />
+              <input type="number" placeholder={t("budget")} value={newJob.budget} onChange={e => setNewJob({ ...newJob, budget: e.target.value })} style={{ flex: '1 1 100px', padding: '14px', borderRadius: '14px', border: '1px solid #CBD5E1', fontSize: '1rem', outline: 'none', background: '#F8FAFC' }} />
             </div>
 
             <input placeholder={t("locationPlaceholder")} value={newJob.location} onChange={e => setNewJob({ ...newJob, location: e.target.value })} style={{ padding: '14px', borderRadius: '14px', border: '1px solid #CBD5E1', fontSize: '1rem', outline: 'none', background: '#F8FAFC' }} />
 
-            <textarea rows="3" placeholder={t("descPlaceholder")} value={newJob.desc} onChange={e => setNewJob({ ...newJob, desc: e.target.value })} style={{ padding: '14px', borderRadius: '14px', border: '1px solid #CBD5E1', fontSize: '1rem', fontFamily: 'inherit', resize: 'none', background: '#F8FAFC' }} />
+            <textarea rows="2" placeholder={t("descPlaceholder")} value={newJob.desc} onChange={e => setNewJob({ ...newJob, desc: e.target.value })} style={{ padding: '14px', borderRadius: '14px', border: '1px solid #CBD5E1', fontSize: '1rem', fontFamily: 'inherit', resize: 'none', background: '#F8FAFC' }} />
 
             <button type="submit" className="hover-scale" style={{ background: 'linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%)', color: 'white', border: 'none', padding: '16px', borderRadius: '16px', cursor: 'pointer', fontWeight: 'bold', fontSize: '1.1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', boxShadow: '0 4px 12px rgba(37, 99, 235, 0.3)' }}>
               {t("postJob")} <Send size={20} />

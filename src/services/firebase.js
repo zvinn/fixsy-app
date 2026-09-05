@@ -5,12 +5,13 @@ import { getMessaging, getToken } from "firebase/messaging";
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAnHVuBwkFiHgUihFvFpf3SwNNbfPjRIhc",
-  authDomain: "fixsy-app-1d3b7.firebaseapp.com",
-  projectId: "fixsy-app-1d3b7",
-  storageBucket: "fixsy-app-1d3b7.firebasestorage.app",
-  messagingSenderId: "618012473906",
-  appId: "1:618012473906:web:f5bfe5bee5afa89cff5a2b"
+  apiKey: "AIzaSyDe--mP0szbc4n2U1ywQB6QaPV9NKv8Pe0",
+  authDomain: "fixsy-fefcb.firebaseapp.com",
+  projectId: "fixsy-fefcb",
+  storageBucket: "fixsy-fefcb.firebasestorage.app",
+  messagingSenderId: "688567914798",
+  appId: "1:688567914798:web:f9a87a545015a9a837aabf",
+  measurementId: "G-R62C56SY2T"
 };
 
 const app = initializeApp(firebaseConfig);

@@ -35,13 +35,15 @@ async function analyzeWithGroq(textDescription, language) {
     try {
         const isAr = language === 'ar';
         const systemMessage = isAr ?
-            `أنت مساعد خبير في صيانة المنازل.
+            `إنت صنايعي مصري "برنس" وخبير في صيانة المنازل.
+             ممنوع نهائياً تستخدم لغة عربية فصحى، اتكلم بس بالعامية المصرية الروشة (كأنك واقف مع الزبون في الشارع).
+             بدل "يجب" قول "لازم"، بدل "قم بـ" قول "اعمل"، وهكذا.
              يجب أن يكون ردك عبارة عن JSON فقط.
              الشكل المطلوب:
              {
                "type": "التخصص (سباكة/كهرباء/نجارة/تكييف/نقاشة/أجهزة/دش/صيانة عامة)",
-               "advice": "نصيحة أمان فورية",
-               "tips": ["خطوة 1", "خطوة 2", "خطوة 3"],
+               "advice": "نصيحة أمان فورية بالعامية المصرية الصرفة",
+               "tips": ["خطوة 1 بالعامية", "خطوة 2 بالعامية", "خطوة 3 بالعامية"],
                "estimatedPrice": { "min": 50, "max": 150, "currency": "EGP" },
                "action": { "type": "BOOK_REQUEST", "service": "أجهزة منزلية" }
              }`
@@ -95,9 +97,9 @@ async function analyzeWithGemini(textDescription, imageFile, language) {
 
         const isAr = language === 'ar';
         const prompt = isAr ?
-            `حلل هذه الصورة وهذا الوصف: "${textDescription}".
-             حدد نوع المشكلة بدقة.
-             الرد JSON فقط: {"type": "...", "advice": "...", "tips": ["..."], "estimatedPrice": {"min": 50, "max": 150, "currency": "EGP"}, "action": {"type":"BOOK...","service":"..."}}`
+            `حلل الصورة والوصف ده: "${textDescription}".
+             إنت صنايعي مصري، حدد نوع المشكلة.
+             الرد JSON فقط باللهجة المصرية: {"type": "...", "advice": "...", "tips": ["..."], "estimatedPrice": {"min": 50, "max": 150, "currency": "EGP"}, "action": {"type":"BOOK...","service":"..."}}`
             :
             `Analyze this image and description: "${textDescription}".
              Identify the trade category.

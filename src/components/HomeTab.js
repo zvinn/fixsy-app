@@ -82,11 +82,18 @@ const HomeTab = ({
                 ) : technicians.filter(t => {
                     if (t.role !== 'tech') return false;
                     if (!searchTerm) return true;
-                    // Check if search term is a service category
+
+                    // 1. Exact Match via Service Map (e.g. 'plumbing' -> ['سباك', 'Plumber'])
                     if (serviceMap[searchTerm]) {
                         return serviceMap[searchTerm].some(term => t.specialty.includes(term));
                     }
-                    return t.specialty.includes(searchTerm) || t.name.includes(searchTerm);
+
+                    // 2. Fuzzy Search in Name or Specialty (Arabic/English)
+                    const termLower = searchTerm.toLowerCase();
+                    const nameLower = t.name.toLowerCase();
+                    const specLower = t.specialty.toLowerCase();
+
+                    return nameLower.includes(termLower) || specLower.includes(termLower);
                 }).length === 0 ? (
                     <div style={{ textAlign: 'center', padding: '40px', color: 'var(--text-secondary)' }}>
                         <Search size={40} style={{ opacity: 0.3, marginBottom: '10px' }} />

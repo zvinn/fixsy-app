@@ -139,6 +139,19 @@ function AppContent() {
     }
   };
 
+  // Referral Code Logic
+  const [referralCodeFromUrl, setReferralCodeFromUrl] = useState(null); // Track if user came from link
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const ref = params.get('ref');
+    if (ref) {
+      setReferralCodeFromUrl(ref);
+      setReferralCodeInput(ref);
+    }
+  }, []);
+
+
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const [aiImage, setAiImage] = useState(null);
@@ -326,7 +339,7 @@ function AppContent() {
   // --- Helper Functions ---
   // handleGoogleLogin moved to top
   const checkUserRole = async (email) => {
-    if (email === "mhamed.saad.ibrahim@gmail.com") { setUserRole('admin'); return; }
+    if (email === "mhamed.saad.ibrahim@gmail.com" || email === "ahmed.wagdy1289@gmail.com") { setUserRole('admin'); return; }
     const techQuery = query(collection(db, "technicians"), where("email", "==", email));
     const techSnapshot = await getDocs(techQuery);
     if (!techSnapshot.empty) { setUserRole('tech'); handleStreak(techSnapshot.docs[0]); return; }
@@ -622,20 +635,11 @@ function AppContent() {
 
     // Dynamic Import to avoid build errors if package is missing during dev
     try {
-      const { analyzeHomeIssue } = await import('./aiService');
+      const { analyzeHomeIssue } = await import('./services/aiService');
       const result = await analyzeHomeIssue(aiQuery, aiImage, language);
       setAiResult(result);
 
-      // 🗣️ Voice Response (TTS)
-      if ('speechSynthesis' in window) {
-        const textToSpeak = language === 'ar'
-          ? `تم التشخيص: ${result.type}. ${result.advice}. التكلفة المتوقعة بين ${result.estimatedPrice?.min || 50} و ${result.estimatedPrice?.max || 150} جنيه`
-          : `Diagnosis: ${result.type}. ${result.advice}. Estimated cost is between ${result.estimatedPrice?.min} and ${result.estimatedPrice?.max}`;
 
-        const utterance = new SpeechSynthesisUtterance(textToSpeak);
-        utterance.lang = language === 'ar' ? 'ar-EG' : 'en-US';
-        window.speechSynthesis.speak(utterance);
-      }
 
       // 📊 Log for Admin Analytics
       try {
@@ -754,21 +758,62 @@ function AppContent() {
     }
   };
 
-  // ⛈️ Weather Alert Integration
+  // ⛈️ Real-time Weather Logic
   const [weatherAlert, setWeatherAlert] = useState(null);
 
   useEffect(() => {
-    // ⛈️ Real-time Weather Alerts from Admin
-    const unsub = onSnapshot(doc(db, "system", "weather_alert"), (doc) => {
-      if (doc.exists() && doc.data().isActive) {
-        setWeatherAlert(doc.data());
-      } else {
-        setWeatherAlert(null);
+    const fetchWeather = async (lat, lon) => {
+      try {
+        const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
+        const data = await response.json();
+        const weather = data.current_weather;
+
+        // Map WMO Weather Codes to Description & Icon
+        const weatherMap = {
+          0: { desc: "مشمس وعال العال", icon: "☀️" },
+          1: { desc: "صافي غالباً", icon: "🌤️" },
+          2: { desc: "غائم جزئياً", icon: "⛅" },
+          3: { desc: "مغيمة شوية", icon: "☁️" },
+          45: { desc: "شبورة وتوهان", icon: "🌫️" },
+          48: { desc: "ضباب كثيف", icon: "🌫️" },
+          51: { desc: "ندى خفيف", icon: "🌧️" },
+          53: { desc: "رذاذ مطر", icon: "🌧️" },
+          55: { desc: "رذاذ تقيل", icon: "🌧️" },
+          61: { desc: "مطر خفيف", icon: "🌧️" },
+          63: { desc: "مطرة حلوة", icon: "🌧️" },
+          65: { desc: "مطرة شديدة.. ركز", icon: "🌧️" },
+          80: { desc: "زياخ مطر خفيفة", icon: "🌦️" },
+          81: { desc: "مطرة فجائية", icon: "🌦️" },
+          82: { desc: "سيول.. خد بالك", icon: "🌧️" },
+          95: { desc: "رعد وبرق.. ليلة صعبة", icon: "⛈️" }
+        };
+
+        const status = weatherMap[weather.weathercode] || { desc: "الجو غريب شوية", icon: "🌡️" };
+
+        setWeatherAlert({
+          isActive: true,
+          icon: status.icon,
+          message: `درجة الحرارة دلوقتي ${weather.temperature}°C وموقعك بيقول إن الجو ${status.desc}.`
+        });
+      } catch (error) {
+        console.error("Weather fetch failed", error);
       }
-    }, (error) => {
-      console.log("Weather sync error", error);
-    });
-    return () => unsub();
+    };
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          fetchWeather(position.coords.latitude, position.coords.longitude);
+        },
+        () => {
+          // Fallback to Cairo if permission denied
+          fetchWeather(30.0444, 31.2357);
+        }
+      );
+    } else {
+      // Fallback to Cairo
+      fetchWeather(30.0444, 31.2357);
+    }
   }, []);
 
   // Filter Logic moved inline to render
@@ -795,13 +840,15 @@ function AppContent() {
             <h2 style={{ marginBottom: '10px' }}>{t("welcome")} {user.displayName}</h2>
             <p style={{ marginBottom: '30px', color: 'var(--text-secondary)' }}>{t("clientDesc")}</p>
 
-            <input
-              type="text"
-              placeholder={t("enterReferralCode")}
-              value={referralCodeInput}
-              onChange={(e) => setReferralCodeInput(e.target.value)}
-              style={{ padding: '10px', width: '100%', marginBottom: '15px', borderRadius: '8px', border: '1px solid #ddd' }}
-            />
+            {referralCodeFromUrl && (
+              <input
+                type="text"
+                placeholder={t("enterReferralCode")}
+                value={referralCodeInput}
+                onChange={(e) => setReferralCodeInput(e.target.value)}
+                style={{ padding: '10px', width: '100%', marginBottom: '15px', borderRadius: '8px', border: '1px solid #ddd' }}
+              />
+            )}
 
             <button onClick={registerAsClient} className="submit-btn" style={{ marginBottom: '15px' }}>
               {t("continue")}
@@ -884,7 +931,7 @@ function AppContent() {
 
 
   return (
-    <div className="App">
+    <div className="App app-container">
       {/* Splash Screen */}
       {showSplash && <SplashScreen onComplete={handleSplashComplete} />}
 
@@ -898,8 +945,8 @@ function AppContent() {
         {/* مودال AI المتطور */}
         {showAIModal && (
           <div className="modal-overlay">
-            <div className="modal-content" style={{ textAlign: 'center', maxWidth: '400px', padding: '25px' }}>
-              <button className="close-btn" onClick={() => { setShowAIModal(false); setAiResult(null); setAiImage(null); }}>✕</button>
+            <div className="modal-content" style={{ textAlign: 'center', width: '92%', maxWidth: '420px', padding: '15px', maxHeight: '80vh', overflowY: 'auto', borderRadius: '28px' }}>
+              <button className="close-btn" style={{ top: '12px', right: '12px', background: '#F1F5F9', width: '30px', height: '30px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%' }} onClick={() => { setShowAIModal(false); setAiResult(null); setAiImage(null); window.speechSynthesis.cancel(); }}>✕</button>
               <div style={{ marginBottom: '20px' }}>
                 <Sparkles size={40} color="#7C3AED" style={{ marginBottom: '10px' }} />
                 <h2 style={{ margin: 0, color: '#1E293B' }}>{t("aiAssistantTitle")}</h2>
