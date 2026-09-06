@@ -1,9 +1,11 @@
-﻿# 🛠️ Fixsy | Smart Home Maintenance & Technician Marketplace
+# 🛠️ Fixsy | Smart Home Maintenance & Technician Marketplace
 
 <div align="center">
 
 **Next-Gen On-Demand Home Services Platform Powered by AI Diagnosis & Real-Time Geolocation**
 
+[![CI](https://github.com/zvinn/fixsy-app/actions/workflows/ci.yml/badge.svg)](https://github.com/zvinn/fixsy-app/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
 [![React](https://img.shields.io/badge/React_18-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://react.dev/)
 [![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)](https://firebase.google.com/)
 [![Gemini AI](https://img.shields.io/badge/Google_Gemini-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://ai.google.dev/)
