@@ -19,16 +19,16 @@ async function listModels() {
         "gemini-1.0-pro"
     ];
 
-    console.log("--- Testing Common Model Names ---");
+    console.warn("--- Testing Common Model Names ---");
 
     for (const m of modelsToTest) {
         try {
             const model = genAI.getGenerativeModel({ model: m });
-            console.log(`Testing: ${m}`);
+            console.warn(`Testing: ${m}`);
             await model.generateContent("Hi");
-            console.log(`✅ ${m} is AVAILABLE!`);
+            console.warn(`✅ ${m} is AVAILABLE!`);
         } catch (e) {
-            console.log(`❌ ${m} failed: ${e.message}`);
+            console.warn(`❌ ${m} failed: ${e.message}`);
         }
     }
 }

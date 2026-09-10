@@ -1,0 +1,641 @@
+/* src/pages/Profile.css */
+
+.profile-container {
+    padding-bottom: 90px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Header Section */
+.profile-header-bg {
+    position: relative;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    padding: 30px 20px 80px;
+    border-radius: 0 0 40px 40px;
+    height: 180px;
+}
+
+.profile-header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.back-button {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(4px);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: white;
+    transition: background 0.2s;
+}
+
+.back-button:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.header-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.header-action-btn {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(4px);
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: white;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: background 0.2s;
+}
+
+.header-action-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Profile Card */
+.profile-card-main {
+    margin: -60px 20px 0;
+    position: relative;
+    z-index: 10;
+}
+
+.profile-avatar-container {
+    position: absolute;
+    top: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 20;
+}
+
+.profile-avatar-wrapper {
+    position: relative;
+    width: 100px;
+    height: 100px;
+}
+
+.profile-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 4px solid var(--bg-primary);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    object-fit: cover;
+    background: var(--bg-secondary);
+}
+
+.edit-avatar-badge {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: var(--primary);
+    border-radius: 50%;
+    padding: 6px;
+    border: 3px solid var(--bg-primary);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Profile Info */
+.profile-info {
+    text-align: center;
+    margin-top: 50px;
+    margin-bottom: 24px;
+}
+
+.profile-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text);
+    margin: 0 0 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.profile-name-display {
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.profile-role-badge {
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    border: 1px solid var(--border);
+}
+
+.profile-role-badge-styled {
+    background: var(--bg-secondary);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.profile-email {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    margin: 0;
+}
+
+/* Stats Row */
+.stats-row {
+    display: flex;
+    justify-content: space-around;
+    padding: 20px 0;
+    background: var(--bg-secondary);
+    border-radius: 16px;
+    margin-bottom: 24px;
+}
+
+.stat-item {
+    text-align: center;
+    flex: 1;
+    position: relative;
+}
+
+.stat-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 20%;
+    height: 60%;
+    width: 1px;
+    background: var(--border);
+}
+
+.stat-value {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text);
+    margin: 0;
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin: 4px 0 0;
+}
+
+/* Section Cards */
+.section-card {
+    background: var(--bg-primary);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: var(--card-shadow);
+    border: 1px solid var(--border);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.fade-in-section {
+    animation: fadeInUp 0.5s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.section-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.section-icon-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--text);
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.section-icon-box {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.section-icon-box-blue {
+    background: #EFF6FF;
+    color: #0056D2;
+}
+
+.view-all-btn {
+    color: var(--primary);
+    font-size: 0.9rem;
+    font-weight: 600;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+/* Address & Info Items */
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    margin-bottom: 10px;
+}
+
+.info-item-emergency {
+    background: #FEF2F2;
+    border: 1px solid #FECACA;
+}
+
+.info-item-icon {
+    color: var(--text-secondary);
+}
+
+.info-content {
+    flex: 1;
+}
+
+.info-label {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.info-label-red {
+    color: #EF4444;
+}
+
+.info-value {
+    font-size: 0.95rem;
+    color: var(--text);
+    font-weight: 500;
+    margin: 0;
+}
+
+.info-value-red {
+    color: #991B1B;
+}
+
+/* Verification Center */
+.verification-card {
+    border: 1px solid #F59E0B;
+    background: rgba(245, 158, 11, 0.05);
+}
+
+.verification-title {
+    color: #F59E0B;
+}
+
+.verification-title-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+}
+
+.verification-icon-box {
+    background: rgba(245, 158, 11, 0.15);
+    color: #F59E0B;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.verification-description {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+.rejection-box {
+    padding: 15px;
+    background: rgba(220, 38, 38, 0.1);
+    border: 1px solid rgba(220, 38, 38, 0.2);
+    border-radius: 12px;
+    margin-bottom: 20px;
+    color: #DC2626;
+    font-size: 0.95rem;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+}
+
+.rejection-icon-margin {
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.rejection-reason-title {
+    display: block;
+    margin-bottom: 4px;
+}
+
+/* Forms */
+.verification-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text);
+}
+
+.custom-file-upload {
+    display: flex;
+    padding: 20px;
+    border: 2px dashed var(--border);
+    border-radius: 16px;
+    text-align: center;
+    cursor: pointer;
+    background: var(--bg-primary);
+    color: var(--text-secondary);
+    transition: all 0.3s;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.custom-file-upload.active {
+    background: rgba(16, 185, 129, 0.05);
+    color: var(--success);
+    border-color: var(--success);
+}
+
+.file-input-hidden {
+    display: none;
+}
+
+.file-upload-label-styled {
+    font-weight: normal;
+}
+
+.file-upload-label-selected {
+    font-weight: 600;
+}
+
+/* Buttons */
+.button-margin-top {
+    margin-top: 10px;
+}
+
+.button-padding-large {
+    padding: 14px;
+    font-size: 1.05rem;
+}
+
+/* Loyalty Section */
+.loyalty-header-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.loyalty-section-title {
+    margin: 0;
+    color: #92400E;
+}
+
+.loyalty-progress-margin {
+    margin-bottom: 15px;
+}
+
+.loyalty-progress-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: #78350F;
+    margin-bottom: 5px;
+}
+
+.loyalty-badges-container {
+    display: flex;
+    gap: 10px;
+}
+
+.level-progress-container {
+    margin-top: 15px;
+}
+
+.progress-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+}
+
+.progress-bar-bg {
+    height: 8px;
+    background: var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #F59E0B 0%, #FBBF24 100%);
+    border-radius: 4px;
+}
+
+/* Achievements */
+.achievements-title-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.achievements-scroll-container {
+    display: flex;
+    gap: 15px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.achievement-item {
+    min-width: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.achievement-icon-wrapper {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+}
+
+.achievement-label {
+    font-weight: 800;
+    font-size: 0.9rem;
+    color: #1E293B;
+    margin-bottom: 3px;
+}
+
+.achievement-desc {
+    font-size: 0.7rem;
+    color: #64748B;
+    line-height: 1.3;
+}
+
+/* Addresses */
+.addresses-icon-box {
+    background: #EFF6FF;
+    color: #2563EB;
+}
+
+.addresses-grid {
+    display: grid;
+    gap: 10px;
+}
+
+.address-item-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+}
+
+.address-icon-circle {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #EFF6FF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.address-title {
+    font-weight: bold;
+    font-size: 0.9rem;
+    color: #334155;
+}
+
+.address-detail {
+    font-size: 0.8rem;
+    color: #64748B;
+}
+
+.address-delete-btn {
+    color: #EF4444;
+}
+
+.no-addresses-message {
+    color: #94a3b8;
+    text-align: center;
+    padding: 15px;
+}
+
+/* Add Address Form */
+.add-address-form-wrapper {
+    margin-top: 15px;
+    background: #F1F5F9;
+    padding: 15px;
+    border-radius: 16px;
+}
+
+.add-address-input-margin {
+    margin-bottom: 10px;
+}
+
+.add-address-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.add-address-btn-dashed {
+    margin-top: 15px;
+    border-style: dashed;
+}
+
+/* Plus Badge */
+.plus-badge {
+    background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%);
+    color: white;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    box-shadow: 0 4px 10px rgba(139, 92, 246, 0.3);
+}
+
+/* Edit Form */
+.edit-form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+/* Utility Classes */
+.profile-header-center {
+    display: flex;
+    justify-content: center;
+}
+
+.profile-content-padding {
+    padding: 0 20px;
+}
+
+.profile-stats-margin {
+    margin-top: 10px;
+}
+
+.verification-desc-padding {
+    padding: 0 0 10px;
+}

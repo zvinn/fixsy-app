@@ -6,37 +6,142 @@ service cloud.firestore {
     function isAuthenticated() {
       return request.auth != null;
     }
+    
+    // ✅ FIXED: Use admin collection instead of hard-coded email
+    function isAdmin() {
+      return request.auth != null && 
+             exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+    
+    // Helper to check if user owns the document
     function isOwner(userId) {
-      return request.auth.uid == userId;
-    }
-    function isTech() {
-      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'tech';
+      return request.auth != null && request.auth.uid == userId;
     }
 
-    // Clients (Users)
+    // ✅ FIXED: Clients - Protected read access
     match /clients/{userId} {
-      allow read: if isAuthenticated() && isOwner(userId);
-      allow write: if isAuthenticated() && isOwner(userId);
+      // Only authenticated users can read their own data or admins can read all
+      allow read: if isAuthenticated() && (isOwner(userId) || isAdmin());
+      allow create: if isAuthenticated() && isOwner(userId);
+      allow update: if isAuthenticated() && isOwner(userId);
+      allow delete: if isAdmin();
+      
+      // Favorites subcollection - users can manage their own favorites
+      match /favorites/{favoriteId} {
+        allow read, write: if isAuthenticated() && isOwner(userId);
+      }
     }
 
-    // Technicians (Public Profile, Private Data)
-    match /technicians/{userId} {
-      allow read: if true; // Public profiles
-      allow write: if isAuthenticated() && isOwner(userId);
-    }
-
-    // Bookings
-    match /bookings/{bookingId} {
-      allow read: if isAuthenticated() && (resource.data.clientId == request.auth.uid || resource.data.techId == request.auth.uid);
+    // ✅ FIXED: Technicians - Field-level protection
+    match /technicians/{techId} {
+      allow read: if true; // Public profiles for browsing
       allow create: if isAuthenticated();
-      allow update: if isAuthenticated() && (resource.data.clientId == request.auth.uid || resource.data.techId == request.auth.uid);
+      
+      // ✅ Prevent technicians from modifying critical fields
+      allow update: if isAuthenticated() && (
+        (resource.data.email == request.auth.token.email && 
+         !request.resource.data.diff(resource.data).affectedKeys()
+           .hasAny(['rating', 'completedJobs', 'earnings', 'isVerified', 'level']))
+        || isAdmin()
+      );
+      
+      allow delete: if isAdmin();
+    }
+
+    // Service Requests
+    match /requests/{document} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated();
+      allow update: if isAuthenticated();
+      allow delete: if isAdmin();
+    }
+
+    // Notifications
+    match /notifications/{document} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated();
+      allow update, delete: if isAuthenticated();
+    }
+
+    // Transactions (Wallet)
+    match /transactions/{document} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated();
+      allow update, delete: if isAdmin();
+    }
+
+    // Coupons
+    match /coupons/{document} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // AI Logs
+    match /ai_logs/{document} {
+      allow read: if isAdmin();
+      allow create: if isAuthenticated();
+      allow update, delete: if isAdmin();
     }
 
     // Tech Stories
-    match /stories/{storyId} {
+    match /stories/{document} {
       allow read: if true;
-      allow create: if isAuthenticated(); // Techs only in app logic, but rules allow auth users for now
-      allow delete: if isAuthenticated() && resource.data.techId == request.auth.uid;
+      allow create: if isAuthenticated();
+      allow update, delete: if isAuthenticated();
+    }
+
+    // Community Posts
+    match /community/{document} {
+      allow read: if true;
+      allow create: if isAuthenticated();
+      allow update, delete: if isAuthenticated();
+    }
+
+    // Disputes
+    match /disputes/{document} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated();
+      allow update, delete: if isAdmin();
+    }
+
+    // Job Market (market_jobs collection)
+    match /market_jobs/{document} {
+      allow read: if true; // Public read for browsing jobs
+      allow create: if isAuthenticated();
+      allow update: if isAuthenticated();
+      allow delete: if isAdmin();
+    }
+    
+    // Legacy jobs collection (if used)
+    match /jobs/{document} {
+      allow read: if true; // Public read for browsing
+      allow create: if isAuthenticated();
+      allow update: if isAuthenticated();
+      allow delete: if isAdmin();
+    }
+
+    // System Settings
+    match /system/{document} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Admins list
+    match /admins/{document} {
+      allow read: if isAdmin();
+      allow write: if isAdmin();
+    }
+    
+    // ✅ Error Logging Collection
+    match /errors/{errorId} {
+      // Users can write errors (for logging)
+      allow create: if isAuthenticated();
+      
+      // Only admins can read errors (for analysis)
+      allow read: if isAdmin();
+      
+      // Only admins can update/delete errors (mark as resolved)
+      allow update, delete: if isAdmin();
     }
   }
 }

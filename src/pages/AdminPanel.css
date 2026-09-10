@@ -1,0 +1,206 @@
+/* src/pages/AdminPanel.css */
+
+.admin-container {
+    padding: 20px;
+    max-width: 900px;
+    margin: 0 auto;
+    padding-bottom: 100px;
+}
+
+.admin-header {
+    background: white;
+    padding: 15px 20px;
+    border-radius: 16px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.admin-title {
+    color: #0056D2;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.2rem;
+}
+
+.tab-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
+
+.tab-button {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: 0.3s;
+}
+
+.tab-button.active {
+    background: #0056D2;
+    color: white;
+}
+
+.tab-button.inactive {
+    background: #F1F5F9;
+    color: #64748B;
+}
+
+.section-title {
+    color: #334155;
+    margin: 0 0 15px 0;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 40px;
+    color: #94a3b8;
+}
+
+/* Tech Verification Cards */
+.tech-card {
+    background: white;
+    padding: 20px;
+    border-radius: 16px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    border: 1px solid #f1f5f9;
+}
+
+.tech-id-image {
+    width: 100%;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+.tech-info h4 {
+    margin: 0 0 8px 0;
+    font-size: 1.1rem;
+}
+
+.rejection-box {
+    margin-top: 15px;
+    background: #FFF1F2;
+    padding: 15px;
+}
+
+/* Disputes */
+.dispute-card {
+    background: #FEF2F2;
+    border: 1px solid #FECACA;
+    padding: 20px;
+    border-radius: 16px;
+    margin-bottom: 15px;
+}
+
+/* Broadcast */
+.broadcast-panel {
+    background: white;
+    padding: 30px;
+    border-radius: 24px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    border: 1px solid #F1F5F9;
+}
+
+.weather-controls {
+    display: flex;
+    gap: 15px;
+}
+
+/* Finance */
+.finance-summary-card {
+    background: #F0F9FF;
+    padding: 20px;
+    border-radius: 16px;
+    margin-bottom: 20px;
+    border: 1px solid #BAE6FD;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.debtor-card {
+    background: white;
+    padding: 20px;
+    border-radius: 16px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+/* Referrals Table */
+.referral-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.referral-table th {
+    padding: 15px;
+    text-align: left;
+    color: #64748B;
+    background: #F8FAFC;
+}
+
+.referral-table td {
+    padding: 15px;
+    border-bottom: 1px solid #F1F5F9;
+}
+
+/* Coupons */
+.create-coupon-card {
+    background: white;
+    padding: 20px;
+    border-radius: 16px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.coupon-ticket {
+    background: white;
+    margin-bottom: 15px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    border: 1px solid #CBD5E1;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.coupon-left {
+    width: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    flex-shrink: 0;
+}
+
+/* Admin List */
+.admin-item {
+    padding: 15px;
+    background: white;
+    margin-bottom: 8px;
+    border-radius: 12px;
+    border: 1px solid #F1F5F9;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}

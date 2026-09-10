@@ -1,0 +1,443 @@
+/* src/pages/TechDashboard.css */
+
+.tech-dashboard-container {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    padding-top: 80px;
+    padding-bottom: 100px;
+}
+
+/* Header */
+.dashboard-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    padding: 15px 20px;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: var(--shadow-sm);
+}
+
+.dashboard-title {
+    color: var(--primary);
+    margin: 0;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Availability Toggle */
+.availability-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.availability-text {
+    font-size: 0.85rem;
+    font-weight: bold;
+}
+
+.availability-text.online {
+    color: var(--success);
+}
+
+.availability-text.offline {
+    color: var(--secondary);
+}
+
+.availability-toggle-btn {
+    width: 50px;
+    height: 28px;
+    border-radius: 20px;
+    position: relative;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.availability-toggle-btn.available {
+    background: #16A34A;
+}
+
+.availability-toggle-btn.unavailable {
+    background: #E2E8F0;
+}
+
+.availability-toggle-knob {
+    width: 22px;
+    height: 22px;
+    background: white;
+    border-radius: 50%;
+    position: absolute;
+    top: 3px;
+    transition: 0.3s;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.availability-toggle-knob.active {
+    left: 25px;
+}
+
+.availability-toggle-knob.inactive {
+    left: 3px;
+}
+
+/* Wallet Card */
+.wallet-card {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+    color: white;
+    padding: 25px;
+    border-radius: 20px;
+    margin-bottom: 25px;
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s;
+    cursor: pointer;
+}
+
+.wallet-card:hover {
+    transform: scale(1.02);
+}
+
+.wallet-decoration-circle {
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    width: 100px;
+    height: 100px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+}
+
+.wallet-info-row {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+}
+
+.wallet-stat {
+    text-align: center;
+}
+
+.wallet-stat-label {
+    font-size: 0.85rem;
+    opacity: 0.9;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.wallet-stat-value {
+    font-size: 1.4rem;
+    font-weight: bold;
+}
+
+.wallet-stat-value .currency {
+    font-size: 0.8rem;
+}
+
+.wallet-divider {
+    width: 1px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.wallet-footer {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 0.9rem;
+    opacity: 0.9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.wallet-alert {
+    margin-top: 15px;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 8px;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 0.8rem;
+}
+
+/* Controls Row */
+.controls-row {
+    display: flex;
+    justify-content: center;
+    margin-top: -20px;
+    margin-bottom: 20px;
+    gap: 10px;
+}
+
+.control-btn {
+    background: white;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 16px;
+    box-shadow: var(--shadow-sm);
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.9rem;
+}
+
+.control-btn.analytics {
+    color: var(--primary);
+}
+
+.control-btn.schedule {
+    color: var(--warning);
+}
+
+/* Schedule Settings */
+.schedule-panel {
+    background: white;
+    padding: 20px;
+    border-radius: 24px;
+    margin-bottom: 25px;
+    animation: fadeIn 0.4s;
+    border: 1px solid var(--border);
+}
+
+.schedule-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.day-btn {
+    padding: 8px 12px;
+    border-radius: 20px;
+    border: 1px solid;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: 0.2s;
+}
+
+/* Verification Alert */
+.verification-alert {
+    background: #FFF7ED;
+    border: 1px solid var(--warning);
+    padding: 15px;
+    border-radius: 16px;
+    margin-bottom: 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+/* Tabs */
+.tabs-container {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 10px;
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+    text-align: center;
+}
+
+.tab-btn.active {
+    background: #EFF6FF;
+    color: var(--primary);
+    border-bottom: 2px solid var(--primary);
+}
+
+.tab-btn.history {
+    background: #F0FDF4;
+    color: var(--success);
+    border-bottom: 2px solid var(--success);
+}
+
+.tab-btn.inactive {
+    background: transparent;
+    color: var(--secondary);
+    border-bottom: none;
+}
+
+/* Request Card */
+.request-card {
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    position: relative;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    transition: var(--transition-base);
+}
+
+.request-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg), var(--shadow-glow);
+    border-color: var(--primary);
+}
+
+.request-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(180deg, var(--primary), var(--secondary));
+    opacity: 0;
+    transition: var(--transition-base);
+}
+
+.request-card:hover::before {
+    opacity: 1;
+}
+
+.payment-badge {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    /* Default LTR, RTL handled via style injection or conditional class if needed */
+    padding: 6px 12px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.payment-badge.wallet {
+    background: #EFF6FF;
+    border: 1px solid #BFDBFE;
+    color: #1E40AF;
+}
+
+.payment-badge.cash {
+    background: #ECFDF5;
+    border: 1px solid #A7F3D0;
+    color: #047857;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.info-item {
+    background: rgba(255, 255, 255, 0.5);
+    padding: 10px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.info-icon-circle {
+    background: #F1F5F9;
+    padding: 8px;
+    border-radius: 50%;
+}
+
+.problem-box {
+    background: #F8FAFC;
+    padding: 15px;
+    border-radius: 16px;
+    margin-bottom: 15px;
+}
+
+.problem-image-wrapper {
+    margin-bottom: 15px;
+    border-radius: 16px;
+    overflow: hidden;
+    height: 120px;
+    position: relative;
+}
+
+.actions-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+/* Status Button - On Way */
+.status-btn-on-way {
+    background: #8B5CF6 !important;
+}
+
+/* Dashboard Panel */
+.dashboard-panel {
+    padding: 20px;
+    border-radius: 24px;
+    margin-bottom: 25px;
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* Section Titles */
+.dashboard-section-title {
+    margin: 0 0 15px 0;
+    color: #1E293B;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.dashboard-section-title.warning {
+    color: #D97706;
+}
+
+/* Map Container */
+.map-container {
+    height: 200px;
+    width: 100%;
+}
+
+.action-icon-btn {
+    flex: 1;
+    height: 44px;
+    background: #F1F5F9;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #475569;
+    text-decoration: none;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

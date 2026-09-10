@@ -1,8 +1,13 @@
 
-const API_KEY = "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";
+// Read key from environment - do not hardcode. Support Node (process.env) and Vite (import.meta.env).
+const API_KEY = process.env.VITE_GROQ_API_KEY || process.env.GROQ_API_KEY || import.meta?.env?.VITE_GROQ_API_KEY || '';
+if (!API_KEY) {
+    console.error('No Groq API key found. Set VITE_GROQ_API_KEY in your environment.');
+    process.exit(1);
+}
 
 async function testGroq() {
-    console.log("--- Testing Groq API (Llama 3) ---");
+    console.warn("--- Testing Groq API (Llama 3) ---");
 
     const url = "https://api.groq.com/openai/v1/chat/completions";
 
@@ -33,10 +38,10 @@ async function testGroq() {
         }
 
         const data = await response.json();
-        console.log("✅ Groq Verification Successful!");
-        console.log("Start Response >>>");
-        console.log(JSON.stringify(data, null, 2));
-        console.log("<<< End Response");
+        console.warn("✅ Groq Verification Successful!");
+        console.warn("Start Response >>>");
+        console.warn(JSON.stringify(data, null, 2));
+        console.warn("<<< End Response");
 
     } catch (error) {
         console.error("❌ Groq Test Failed:", error.message);

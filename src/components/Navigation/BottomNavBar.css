@@ -1,0 +1,125 @@
+/* src/components/Navigation/BottomNavBar.css */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 8px 0;
+    z-index: 9999;
+    padding-bottom: env(safe-area-inset-bottom, 14px);
+    background: rgba(255, 255, 255, 0.92);
+    border-top: 1px solid rgba(226, 232, 240, 0.85);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    box-shadow: 0 -4px 25px rgba(0, 0, 0, 0.05);
+}
+
+.nav-btn {
+    background: none;
+    border: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 4px 6px;
+    cursor: pointer;
+    flex: 1;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    outline: none;
+    gap: 3px;
+}
+
+.nav-btn:focus-visible {
+    background-color: var(--bg-secondary);
+    border-radius: 8px;
+}
+
+/* Material 3 / iOS Crisp Centered Icon Pill */
+.nav-icon-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 30px;
+    border-radius: 15px;
+    transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.nav-icon {
+    color: var(--text-secondary);
+    stroke-width: 2;
+    transition: color 0.2s ease, transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), stroke-width 0.2s ease;
+}
+
+/* Active State: Clean, sharp, perfectly centered pill around the icon */
+.nav-btn.active .nav-icon-container {
+    background: rgba(0, 86, 210, 0.12);
+    box-shadow: inset 0 0 0 1px rgba(0, 86, 210, 0.18);
+}
+
+.nav-btn.active .nav-icon {
+    color: var(--primary);
+    stroke-width: 2.5;
+    transform: scale(1.08);
+}
+
+.nav-label {
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    transition: color 0.2s ease, font-weight 0.2s ease;
+    white-space: nowrap;
+    letter-spacing: -0.01em;
+}
+
+.nav-btn.active .nav-label {
+    font-weight: 700;
+    color: var(--primary);
+}
+
+/* Active Top Indicator Line */
+.nav-btn::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%) scaleX(0);
+    width: 22px;
+    height: 3px;
+    border-radius: 0 0 3px 3px;
+    background: var(--primary);
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-btn.active::before {
+    transform: translateX(-50%) scaleX(1);
+    box-shadow: 0 2px 8px rgba(0, 86, 210, 0.5);
+}
+
+/* Hover state on desktop */
+@media (hover: hover) {
+    .nav-btn:not(.active):hover .nav-icon-container {
+        background: rgba(0, 0, 0, 0.04);
+    }
+    .nav-btn:not(.active):hover .nav-icon {
+        color: var(--text-primary);
+    }
+}
+
+@media (min-width: 768px) {
+    .bottom-nav {
+        max-width: 560px;
+        left: 50% !important;
+        right: auto !important;
+        transform: translateX(-50%);
+        border-radius: 24px 24px 0 0;
+        box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.12);
+        border: 1px solid var(--border);
+        border-bottom: none;
+    }
+}

@@ -1,0 +1,285 @@
+/* src/components/HomeTab.css */
+.home-tab {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.home-container {
+    margin-top: 20px;
+    padding: 0 20px;
+}
+
+/* Weather Alert */
+.weather-alert {
+    background: linear-gradient(135deg, #1E293B 0%, #334155 100%);
+    border-radius: var(--radius-md);
+    padding: 15px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    color: white;
+    box-shadow: var(--card-shadow);
+    position: relative;
+    transition: transform 0.2s;
+}
+
+.weather-alert:hover {
+    transform: scale(1.02);
+}
+
+.weather-icon {
+    font-size: 2rem;
+}
+
+.weather-content {
+    flex: 1;
+}
+
+.weather-title {
+    font-weight: bold;
+    font-size: 1rem;
+    margin-bottom: 2px;
+}
+
+.weather-message {
+    font-size: 0.85rem;
+    opacity: 0.9;
+}
+
+.close-alert-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Sections */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    align-items: center;
+}
+
+.section-title {
+    font-size: 1.2rem;
+    color: var(--text);
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+.view-all-link {
+    color: var(--primary);
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+/* Services Grid */
+.services-section {
+    margin-bottom: 40px;
+}
+
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+}
+
+.service-item {
+    padding: 15px 5px;
+    text-align: center;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    transition: transform 0.2s;
+}
+
+.service-item:hover {
+    transform: translateY(-5px);
+}
+
+.service-icon-box {
+    width: 55px;
+    height: 55px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    box-shadow: var(--shadow-colored);
+}
+
+.service-label {
+    font-size: 0.8rem;
+    color: var(--text);
+    font-weight: 700;
+}
+
+/* Technicians List */
+.techs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 15px;
+}
+
+.tech-card {
+    padding: 15px;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.3s;
+    background: var(--bg-secondary);
+    box-shadow: var(--card-shadow);
+    border: 1px solid var(--border);
+    position: relative;
+}
+
+.tech-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.15);
+}
+
+.favorite-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    /* RTL aware in logic or CSS direction */
+    background: rgba(255, 255, 255, 0.8);
+    border: none;
+    border-radius: 50%;
+    padding: 6px;
+    cursor: pointer;
+    z-index: 2;
+    transition: transform 0.2s;
+}
+
+.favorite-btn:active {
+    transform: scale(0.9);
+}
+
+.tech-image-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 12px;
+    position: relative;
+}
+
+.tech-image {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--bg-primary);
+    box-shadow: var(--shadow-colored);
+}
+
+.verified-badge {
+    position: absolute;
+    bottom: 0;
+    right: 25%;
+    background: var(--success);
+    border-radius: 50%;
+    padding: 2px;
+    border: 2px solid var(--bg-primary);
+}
+
+.tech-info {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.tech-name {
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin-bottom: 4px;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.tech-specialty {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+}
+
+.tech-rating {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    background: var(--bg-primary);
+    padding: 4px 10px;
+    border-radius: var(--radius-sm);
+    width: fit-content;
+    margin: 0 auto 8px;
+}
+
+.rating-value {
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--text);
+}
+
+.view-details-btn {
+    width: 100%;
+    background: var(--bg-primary);
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 10px;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    transition: all 0.2s ease;
+}
+
+.view-details-btn:hover {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+    transform: scale(1.02);
+    box-shadow: var(--shadow-colored);
+}
+
+.view-details-btn:active {
+    transform: scale(0.98);
+}
+
+.no-techs {
+    text-align: center;
+    padding: 40px;
+    color: var(--text-secondary);
+    grid-column: 1 / -1;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+@media (min-width: 900px) {
+    .services-grid {
+        grid-template-columns: repeat(8, 1fr) !important;
+        gap: 12px;
+    }
+}

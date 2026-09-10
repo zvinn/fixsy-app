@@ -1,51 +1,131 @@
-/* 🎨 Fixsy Modern Design System - Phase 7 */
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap');
+/* 🎨 Fixsy App Styles - Using Design System v2.0 */
+/* Design System files are imported in index.css */
 
-:root {
-  /* Core Colors */
-  --primary: #0056D2;
-  --secondary: #0EA5E9;
-  --accent: #F59E0B;
-  --success: #10B981;
-  --danger: #EF4444;
 
-  /* Modern Palette */
-  --bg-gradient: linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 100%);
-  --surface: rgba(255, 255, 255, 0.85);
-  --glass: rgba(255, 255, 255, 0.65);
-  --text: #1E293B;
-  --text-secondary: #64748B;
-  --border: rgba(226, 232, 240, 0.6);
+/* ============================================
+   📱 APP SPECIFIC STYLES
+   ============================================ */
 
-  /* Shadows */
-  --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
-  --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-  --shadow-glow: 0 0 20px rgba(0, 86, 210, 0.15);
-
-  /* Animation */
-  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-[data-theme='dark'] {
-  --primary: #3B82F6;
-  --bg-gradient: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
-  --surface: rgba(30, 41, 59, 0.85);
-  --glass: rgba(15, 23, 42, 0.65);
-  --text: #F8FAFC;
-  --text-secondary: #94A3B8;
-  --border: rgba(51, 65, 85, 0.6);
-  --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
-  --shadow-glow: 0 0 20px rgba(59, 130, 246, 0.2);
-}
-
-body {
-  margin: 0;
-  font-family: 'Cairo', sans-serif;
-  background: var(--bg-gradient) fixed;
-  color: var(--text);
-  -webkit-font-smoothing: antialiased;
+/* App Container */
+.App {
   min-height: 100vh;
+  padding-bottom: var(--space-20);
+}
+
+/* ============================================
+   🏠 HOME PAGE STYLES
+   ============================================ */
+
+/* Hero Section */
+.hero-section {
+  background: radial-gradient(circle at 10% 20%, rgb(0, 86, 210) 0%, rgb(2, 132, 199) 90%);
+  padding: var(--space-12) var(--space-5) var(--space-20);
+  border-radius: 0 0 var(--border-radius-xl) var(--border-radius-xl);
+  color: var(--text-inverse);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-xl);
+}
+
+.hero-section::before,
+.hero-section::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.hero-section::before {
+  top: -10%;
+  left: -10%;
+  width: 300px;
+  height: 300px;
+}
+
+.hero-section::after {
+  bottom: -20%;
+  right: -5%;
+  width: 200px;
+  height: 200px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+}
+
+.hero-badge {
+  background: rgba(255, 255, 255, 0.2);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--border-radius-full);
+  font-size: var(--font-size-sm);
+  backdrop-filter: blur(5px);
+  display: inline-block;
+  margin-bottom: var(--space-3);
+}
+
+.hero-title {
+  margin: 0 0 var(--space-4);
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-black);
+  letter-spacing: -1px;
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.hero-title-accent {
+  color: #93C5FD;
+}
+
+/* Search Container */
+.search-container {
+  background: white;
+  padding: var(--space-2);
+  border-radius: var(--border-radius-md);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  max-width: 600px;
+  margin: var(--space-8) auto 0;
+  box-shadow: var(--shadow-lg);
+  transform: translateY(40px);
+}
+
+.search-input {
+  border: none;
+  outline: none;
+  flex: 1;
+  font-size: var(--font-size-base);
+  color: var(--text-primary);
+  padding: var(--space-3) 0;
+  background: transparent;
+}
+
+.search-icon-wrapper {
+  padding: 0 var(--space-4);
+  display: flex;
+  align-items: center;
+}
+
+.ai-search-btn {
+  background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+  border: none;
+  border-radius: var(--border-radius-md);
+  padding: var(--space-3) var(--space-5);
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+  transition: var(--transition-base);
+  font-weight: var(--font-weight-medium);
+}
+
+.ai-search-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
 }
 
 /* 🧼 Glassmorphism Classes */
@@ -112,7 +192,7 @@ body {
   animation: fadeIn 0.6s ease-out forwards;
 }
 
-/* 🖼️ Component Styles */
+/* App.css - Global styles */
 
 /* Header */
 .header {
@@ -337,4 +417,12 @@ body {
   100% {
     background-position: -200% 0;
   }
+}
+.whatsapp-float-btn {
+    right: 20px;
+}
+@media (min-width: 1200px) {
+    .whatsapp-float-btn {
+        right: max(24px, calc(50% - 590px)) !important;
+    }
 }

@@ -1,0 +1,288 @@
+/* src/pages/UserBookings.css */
+
+.bookings-container {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    padding-bottom: 120px;
+}
+
+.bookings-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.bookings-title {
+    color: var(--text-primary, #1e293b);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1.6rem;
+    font-weight: 800;
+}
+
+.bookings-title-icon {
+    background: var(--primary-light, #EFF6FF);
+    padding: 10px;
+    border-radius: 12px;
+    color: var(--primary, #3B82F6);
+}
+
+.load-more-btn {
+    background: var(--bg-secondary, white);
+    border: 1px solid var(--border, #E2E8F0);
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    color: var(--primary, #3B82F6);
+    transition: 0.2s;
+}
+
+.load-more-btn:hover {
+    background: var(--primary-light, #EFF6FF);
+}
+
+.empty-state {
+    text-align: center;
+    padding: 80px 20px;
+    color: #94a3b8;
+}
+
+.empty-icon {
+    font-size: 5rem;
+    margin-bottom: 20px;
+    opacity: 0.5;
+}
+
+.request-card {
+    padding: 25px;
+    border-radius: 24px;
+    margin-bottom: 25px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(0, 0, 0, 0.02);
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.95) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.status-stripe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    margin-top: 10px;
+}
+
+.tech-info {
+    display: flex;
+    gap: 15px;
+}
+
+.tech-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 14px;
+    background: #F1F5F9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #64748B;
+}
+
+.tech-details h3 {
+    margin: 0 0 4px 0;
+    font-size: 1.2rem;
+    color: #1E293B;
+}
+
+.service-type {
+    font-size: 0.9rem;
+    color: #64748B;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.price-tag {
+    text-align: right;
+}
+
+.price-value {
+    font-size: 1.4rem;
+    font-weight: 900;
+    color: #059669;
+}
+
+.discount-badge {
+    font-size: 0.75rem;
+    color: #EF4444;
+    background: #FEE2E2;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.date-badge {
+    background: #F8FAFC;
+    padding: 12px 16px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid #E2E8F0;
+    color: #334155;
+    font-weight: 500;
+}
+
+.details-box {
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #F8FAFC;
+    border-radius: 16px;
+    border: 1px solid #F1F5F9;
+}
+
+.detail-row {
+    color: #334155;
+    font-size: 0.95rem;
+    margin: 0 0 8px 0;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+}
+
+.address-row {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin: 0;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 12px;
+    margin-top: 15px;
+    flex-wrap: wrap;
+}
+
+.review-section {
+    text-align: center;
+    margin-top: 20px;
+    border-top: 1px dashed var(--border, #E2E8F0);
+    padding-top: 20px;
+}
+
+.review-card {
+    background: var(--bg-tertiary, #F8FAFC);
+    padding: 15px;
+    border-radius: 16px;
+    border: 1px solid var(--border, #E2E8F0);
+    display: inline-block;
+    width: 100%;
+}
+
+.timeline-container {
+    margin: 25px 0;
+    position: relative;
+    padding: 0 10px;
+    height: 80px;
+}
+
+.timeline-line-bg {
+    position: absolute;
+    top: 15px;
+    left: 20px;
+    right: 20px;
+    height: 4px;
+    background: #E2E8F0;
+    border-radius: 2px;
+    z-index: 0;
+}
+
+.timeline-line-progress {
+    position: absolute;
+    top: 15px;
+    left: 20px;
+    /* Adjusted to match bg line start */
+    height: 4px;
+    background: linear-gradient(90deg, #10B981, #34D399);
+    border-radius: 2px;
+    z-index: 0;
+    transition: width 1s ease-in-out;
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+}
+
+.timeline-steps {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    padding: 0 5px;
+}
+
+.timeline-step {
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 60px;
+    position: relative;
+}
+
+.step-circle {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.step-label {
+    position: absolute;
+    top: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    text-align: center;
+    font-size: 0.75rem;
+    color: #059669;
+    font-weight: 800;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    white-space: normal;
+    line-height: 1.2;
+}
+
+/* Modal Overrides */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2500;
+    backdrop-filter: blur(5px);
+}
+
+.sos-modal {
+    background: rgba(220, 38, 38, 0.9);
+}

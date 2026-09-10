@@ -1,0 +1,712 @@
+/* src/pages/JobMarket.css */
+
+.job-market-container {
+    padding: 24px 20px;
+    max-width: 860px;
+    margin: 0 auto;
+    padding-bottom: 120px;
+}
+
+/* Market Header */
+.market-header {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(240, 249, 255, 0.9) 100%);
+    border: 1px solid var(--border);
+    border-radius: var(--border-radius-xl);
+    padding: 30px 24px;
+    margin-bottom: 24px;
+    text-align: center;
+    box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: hidden;
+}
+
+[data-theme='dark'] .market-header {
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.9) 100%);
+}
+
+.market-header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(0, 86, 210, 0.1);
+    color: var(--primary);
+    padding: 6px 14px;
+    border-radius: var(--border-radius-full);
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.market-title {
+    color: var(--text-primary);
+    margin: 0 0 10px;
+    font-size: 1.85rem;
+    font-weight: 900;
+    letter-spacing: -0.5px;
+}
+
+.market-desc {
+    color: var(--text-secondary);
+    margin: 0 auto 20px;
+    font-size: 0.95rem;
+    max-width: 600px;
+    line-height: 1.6;
+}
+
+.market-cta-box {
+    display: flex;
+    justify-content: center;
+}
+
+.toggle-post-btn {
+    background: linear-gradient(135deg, #0056D2 0%, #0EA5E9 100%) !important;
+    border-radius: 14px !important;
+    padding: 12px 24px !important;
+    font-weight: 700 !important;
+    box-shadow: 0 4px 15px rgba(0, 86, 210, 0.3) !important;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Post Job Form Card */
+.post-job-motion-wrapper {
+    margin-bottom: 24px;
+}
+
+.post-job-card {
+    background: var(--surface) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: var(--border-radius-xl) !important;
+    padding: 24px !important;
+    box-shadow: var(--shadow-lg) !important;
+}
+
+.post-job-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.post-job-title-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.post-icon-box {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: #EFF6FF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.post-job-title {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--text-primary);
+}
+
+.post-job-subtitle {
+    margin: 2px 0 0;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.close-form-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-tertiary);
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-fast);
+}
+
+.close-form-btn:hover {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+.post-job-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Category Quick Select Chips */
+.category-select-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.input-label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.cat-chips-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.cat-chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 12px;
+    border: 1.5px solid var(--border);
+    background: var(--surface);
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: var(--transition-base);
+}
+
+.cat-chip:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+}
+
+.cat-chip.active {
+    background: var(--bg-primary);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.form-grid-2 {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 16px;
+}
+
+@media (max-width: 600px) {
+    .form-grid-2 {
+        grid-template-columns: 1fr;
+    }
+}
+
+.input-field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.job-textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: var(--border-radius-md);
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 0.95rem;
+    resize: vertical;
+    box-sizing: border-box;
+    transition: var(--transition-base);
+}
+
+.job-textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(0, 86, 210, 0.1);
+}
+
+.publish-submit-btn {
+    margin-top: 8px;
+    padding: 14px !important;
+    border-radius: 14px !important;
+    font-weight: 800 !important;
+    font-size: 1rem !important;
+    background: linear-gradient(135deg, #0056D2 0%, #0EA5E9 100%) !important;
+    box-shadow: 0 4px 15px rgba(0, 86, 210, 0.3) !important;
+}
+
+/* Filter Section Card */
+.filter-section-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--border-radius-lg);
+    padding: 10px 14px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow-xs);
+}
+
+.filter-chips-wrapper {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 2px;
+}
+
+.filter-tab-pill {
+    padding: 8px 16px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    background: transparent;
+    color: var(--text-secondary);
+    transition: var(--transition-fast);
+}
+
+.filter-tab-pill:hover {
+    background: rgba(0, 0, 0, 0.04);
+    color: var(--text-primary);
+}
+
+.filter-tab-pill.active {
+    background: var(--primary);
+    color: white;
+    box-shadow: 0 2px 8px rgba(0, 86, 210, 0.3);
+}
+
+/* Job Cards */
+.job-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.job-card-wrapper {
+    width: 100%;
+}
+
+.job-card {
+    border-radius: var(--border-radius-xl) !important;
+    padding: 24px !important;
+    border: 1px solid var(--border) !important;
+    background: var(--surface) !important;
+    box-shadow: var(--shadow-sm) !important;
+    transition: var(--transition-base) !important;
+}
+
+.job-card:hover {
+    border-color: rgba(0, 86, 210, 0.3) !important;
+    box-shadow: var(--shadow-md), var(--shadow-glow) !important;
+}
+
+.job-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+.job-cat-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 10px;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.job-status-pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #10B981;
+    background: rgba(16, 185, 129, 0.1);
+    padding: 4px 10px;
+    border-radius: 20px;
+}
+
+.pulse-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #10B981;
+    box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.3);
+    animation: pulse-subtle 2s infinite;
+}
+
+.job-title {
+    margin: 0 0 8px;
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    line-height: 1.4;
+}
+
+.job-meta-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+
+.job-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.job-desc {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.65;
+    background: rgba(241, 245, 249, 0.6);
+    padding: 16px;
+    border-radius: var(--border-radius-md);
+    margin: 0 0 20px 0;
+    border: 1px solid var(--border);
+}
+
+[data-theme='dark'] .job-desc {
+    background: rgba(15, 23, 42, 0.5);
+}
+
+.job-footer-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 16px;
+}
+
+.client-badge {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.client-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #0056D2 0%, #0EA5E9 100%);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 0.95rem;
+}
+
+.client-info-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.client-name {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.client-sub {
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+}
+
+.budget-box {
+    text-align: left;
+    direction: ltr;
+}
+
+[dir="rtl"] .budget-box {
+    text-align: right;
+    direction: rtl;
+}
+
+.budget-label {
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+    display: block;
+    margin-bottom: 2px;
+}
+
+.budget-value {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+}
+
+.budget-value .amount {
+    font-size: 1.4rem;
+    font-weight: 900;
+    color: var(--primary);
+}
+
+.budget-value .curr {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.budget-value .no-budget {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+}
+
+/* Actions Area */
+.job-actions-area {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.offers-toggle-btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 10px 14px;
+    background: var(--bg-primary);
+    border: 1px solid var(--border);
+    border-radius: var(--border-radius-md);
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.offers-toggle-btn:hover {
+    background: rgba(0, 86, 210, 0.05);
+}
+
+.offers-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.offers-toggle-arrow {
+    color: var(--text-secondary);
+}
+
+.no-offers-hint {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    color: var(--text-tertiary);
+}
+
+/* Tech Action Box */
+.tech-action-box {
+    margin-top: 8px;
+}
+
+.submit-offer-trigger-btn {
+    background: linear-gradient(135deg, #0056D2 0%, #0EA5E9 100%) !important;
+    border-radius: 12px !important;
+    padding: 12px !important;
+    font-weight: 700 !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 8px !important;
+}
+
+.tech-offer-input-container {
+    background: rgba(255, 247, 237, 0.8);
+    border: 1.5px dashed #FB923C;
+    border-radius: var(--border-radius-md);
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+[data-theme='dark'] .tech-offer-input-container {
+    background: rgba(67, 20, 7, 0.4);
+    border-color: #EA580C;
+}
+
+.offer-input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.offer-input-icon {
+    position: absolute;
+    top: 14px;
+    right: 12px;
+    color: #EA580C;
+    z-index: 10;
+}
+
+.offer-num-input {
+    padding-right: 36px !important;
+    font-size: 1rem !important;
+    font-weight: 700 !important;
+}
+
+.offer-presets {
+    display: flex;
+    gap: 8px;
+}
+
+.preset-pill {
+    background: white;
+    border: 1px solid #FDBA74;
+    color: #EA580C;
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.preset-pill:hover {
+    background: #FFEDD5;
+}
+
+.offer-buttons-row {
+    display: flex;
+    gap: 8px;
+}
+
+.confirm-offer-btn {
+    flex: 1;
+    background: #EA580C !important;
+    border: none !important;
+    border-radius: 10px !important;
+    font-weight: 700 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+}
+
+.cancel-offer-btn {
+    background: var(--bg-primary);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    padding: 8px 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Offers List */
+.offers-list-container {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px dashed var(--border);
+    overflow: hidden;
+}
+
+.offers-header-title {
+    margin: 0 0 12px;
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.offers-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.offer-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    border-radius: var(--border-radius-md);
+    background: var(--surface);
+    border: 1px solid var(--border);
+}
+
+.offer-tech-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.tech-avatar-circle {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #EFF6FF;
+    color: var(--primary);
+    font-weight: 800;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #BFDBFE;
+}
+
+.offer-tech-name {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.offer-tech-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+}
+
+.offer-tech-rating {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    color: #F59E0B;
+    font-weight: 700;
+}
+
+.offer-right-side {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.offer-price-tag {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #10B981;
+}
+
+.accept-offer-btn {
+    background: #10B981 !important;
+    color: white !important;
+    border-radius: 10px !important;
+    font-weight: 700 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+}
+
+.no-jobs {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-tertiary);
+    border-radius: var(--border-radius-xl);
+}
