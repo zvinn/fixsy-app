@@ -5,6 +5,11 @@
 **Next-Gen On-Demand Home Services Platform Powered by AI Diagnosis, Vite, React 18 & Real-Time Geolocation**
 
 [![Vercel Live Demo](https://img.shields.io/badge/Vercel-Live_Demo-00C7B7?style=for-the-badge&logo=vercel&logoColor=white)](https://fixsy-app.vercel.app/)
+<br />
+
+[🌐 **Explore Live Demo**](https://fixsy-app.vercel.app/) • [🗺️ **Product Roadmap**](ROADMAP.md) • [🤝 **Contribution Guide**](CONTRIBUTING.md) • [📝 **Changelog**](CHANGELOG.md)
+
+<br />
 [![PWA Ready](https://img.shields.io/badge/PWA-Installable_App-5A0FC8?style=for-the-badge&logo=pwa&logoColor=white)](https://fixsy-app.vercel.app/)
 [![CI](https://github.com/zvinn/fixsy-app/actions/workflows/ci.yml/badge.svg)](https://github.com/zvinn/fixsy-app/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
