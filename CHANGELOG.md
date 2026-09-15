@@ -2,6 +2,13 @@
 
 All notable changes to the Fixsy project are documented in this file.
 
+## [1.2.1] - 2026-09-15
+
+### 🔍 Job Market Search & Multi-Criteria Filtering
+- **Real-Time Text Search:** Added live debounced search across job titles, issue descriptions, and neighborhoods.
+- **Governorate & Trade Categorization:** Filter tenders by Egyptian governorates (Alexandria, Cairo, Giza) and trades (Plumbing, Electricity, AC/HVAC, Carpentry, Painting).
+- **Responsive Glassmorphism Filter Panel:** Added modern glass-card UI with horizontal swipeable pills on mobile and one-click filter reset.
+
 ## [1.2.0] - 2026-09-11
 
 ### 🚀 Performance & Architecture

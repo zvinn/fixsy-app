@@ -275,7 +275,10 @@ const JobMarket: React.FC<JobMarketProps> = ({ user, userRole, goBack: _goBack }
     });
 
     // Filters
-    const [filterType, setFilterType] = useState<'newest' | 'highest'>('newest');
+    const [filterType, setFilterType] = useState<'newest' | 'highest' | 'lowest'>('newest');
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [selectedCity, setSelectedCity] = useState<string>('all');
 
     // 1. Subscribe to Live Firestore Jobs
     useEffect(() => {
