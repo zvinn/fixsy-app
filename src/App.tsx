@@ -144,6 +144,7 @@ function AppContentInner() {
         onLogin={handleGoogleLogin}
         onEmailLogin={handleEmailLogin}
         onEmailSignUp={handleEmailSignUp}
+        onGuestLogin={handleGuestLogin}
         onTechSignup={() => setActiveTab('tech-signup')}
       />
     );

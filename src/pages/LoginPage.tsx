@@ -1,12 +1,13 @@
 // src/pages/LoginPage.tsx
 import { useState, useEffect } from 'react';
 import gsap from 'gsap';
-import { User, Wrench, Mail, Lock, Eye, EyeOff, ShieldCheck, Sparkles } from 'lucide-react';
+import { User, Wrench, Mail, Lock, Eye, EyeOff, ShieldCheck, Sparkles, ArrowLeft, ArrowRight, CheckCircle2 } from 'lucide-react';
 import OptimizedImage from '../components/common/OptimizedImage';
 import { useLanguage } from '../context/LanguageContext';
 import toast from 'react-hot-toast';
 import logo from '../logo.png';
 import logoWebP from '../logo.webp';
+import './LoginPage.css';
 
 type Role = 'client' | 'tech';
 
@@ -17,6 +18,27 @@ interface LoginPageProps {
     onTechSignup?: () => void;
     onGuestLogin?: (role: "client" | "tech" | "admin") => void;
 }
+
+const DEMO_CREDENTIALS = {
+    client: {
+        uid: 'demo-client-001',
+        email: 'client.demo@fixsy.com',
+        displayName: 'أحمد محمود (عميل تجريبي)',
+        photoURL: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150',
+    },
+    tech: {
+        uid: 'demo-tech-001',
+        email: 'tech.demo@fixsy.com',
+        displayName: 'م. كريم سامي (فني تجريبي)',
+        photoURL: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150',
+    },
+    admin: {
+        uid: 'demo-admin-001',
+        email: 'admin.demo@fixsy.com',
+        displayName: 'إدارة المنصة (أدمن تجريبي)',
+        photoURL: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150',
+    }
+};
 
 const LoginPage: React.FC<LoginPageProps> = ({ onLogin, onEmailLogin, onEmailSignUp, onTechSignup, onGuestLogin }) => {
     const { t, language } = useLanguage();
@@ -32,11 +54,34 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, onEmailLogin, onEmailSig
     });
 
     useEffect(() => {
-        gsap.fromTo(".login-card", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" });
+        gsap.fromTo(
+            ".login-card-container",
+            { y: 25, opacity: 0, scale: 0.98 },
+            { y: 0, opacity: 1, scale: 1, duration: 0.75, ease: "power3.out" }
+        );
     }, []);
 
     const handleGoogleLoginClick = (): void => {
         onLogin(selectedRole);
+    };
+
+    const handleDemoSelect = (role: 'client' | 'tech' | 'admin') => {
+        try {
+            const demo = DEMO_CREDENTIALS[role];
+            localStorage.setItem('fixsy_demo_user', JSON.stringify(demo));
+            localStorage.setItem('fixsy_demo_role', role);
+            localStorage.setItem('fixsy_user_role', role);
+            localStorage.setItem('skipLogin', 'true');
+        } catch (e) {
+            console.warn("Storage fallback notice:", e);
+        }
+
+        if (onGuestLogin) {
+            onGuestLogin(role);
+        } else {
+            // Instant guaranteed URL fallback
+            window.location.href = `/?demo=${role}`;
+        }
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -84,201 +129,115 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, onEmailLogin, onEmailSig
     };
 
     return (
-        <div style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            minHeight: '100vh',
-            fontFamily: 'Cairo, sans-serif',
-            direction: language === 'ar' ? 'rtl' : 'ltr',
-            background: 'linear-gradient(135deg, #1e293b 0%, #334155 100%)',
-            overflow: 'auto',
-            position: 'relative',
-            padding: '20px'
-        }}>
-            {/* Background Blobs */}
-            <div style={{ position: 'absolute', top: '-10%', left: '-10%', width: '400px', height: '400px', background: 'rgba(0, 86, 210, 0.1)', borderRadius: '50%', filter: 'blur(80px)' }} aria-hidden="true"></div>
-            <div style={{ position: 'absolute', bottom: '-10%', right: '-10%', width: '300px', height: '300px', background: 'rgba(245, 158, 11, 0.1)', borderRadius: '50%', filter: 'blur(60px)' }} aria-hidden="true"></div>
+        <div className="login-page-wrapper" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+            {/* Ambient Background Blobs */}
+            <div className="login-ambient-blob blob-1" aria-hidden="true" />
+            <div className="login-ambient-blob blob-2" aria-hidden="true" />
 
-            <div className="login-card glass-panel" style={{
-                width: '90%',
-                maxWidth: '450px',
-                padding: '40px',
-                borderRadius: '30px',
-                textAlign: 'center',
-                boxShadow: '0 20px 40px rgba(0,0,0,0.1)',
-                background: 'rgba(255, 255, 255, 0.9)'
-            }}>
-                <picture>
-                    <source srcSet={logoWebP} type="image/webp" />
-                    <OptimizedImage src={logo} alt="Fixsy Logo" style={{ width: '100px', marginBottom: '20px', borderRadius: '20px', boxShadow: '0 10px 20px rgba(0,0,0,0.1)' }} />
-                </picture>
-
-                <h1 style={{ fontSize: '2rem', fontWeight: '900', color: '#0056D2', marginBottom: '5px' }}>Fixsy</h1>
-                <p style={{ color: '#475569', marginBottom: '30px', fontWeight: '500' }}>{t("loginSubtitle")}</p>
-
-                {/* Role Selection */}
-                <fieldset style={{ marginBottom: '30px', textAlign: language === 'ar' ? 'right' : 'left', border: 'none', padding: 0 }}>
-                    <legend style={{ fontSize: '0.9rem', fontWeight: '700', marginBottom: '10px', color: '#1e293b' }}>{t("selectRole")}</legend>
-                    <div style={{ display: 'flex', gap: '15px' }} role="radiogroup" aria-label={t("selectRole")}>
-                        <button
-                            type="button"
-                            onClick={() => setSelectedRole('client')}
-                            role="radio"
-                            aria-checked={selectedRole === 'client'}
-                            className={selectedRole === 'client' ? 'hover-scale' : ''}
-                            style={{
-                                flex: 1,
-                                padding: '15px',
-                                border: selectedRole === 'client' ? '3px solid #0056D2' : '2px solid #cbd5e1',
-                                background: selectedRole === 'client' ? '#eff6ff' : 'white',
-                                borderRadius: '15px',
-                                cursor: 'pointer',
-                                transition: 'all 0.3s',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                gap: '8px',
-                                fontWeight: selectedRole === 'client' ? '700' : '600',
-                                color: selectedRole === 'client' ? '#0056D2' : '#475569',
-                                fontSize: '0.95rem'
-                            }}
-                        >
-                            <User size={20} />
-                            {t("client")}
-                        </button>
-                        <button
-                            type="button"
-                            onClick={() => setSelectedRole('tech')}
-                            role="radio"
-                            aria-checked={selectedRole === 'tech'}
-                            className={selectedRole === 'tech' ? 'hover-scale' : ''}
-                            style={{
-                                flex: 1,
-                                padding: '15px',
-                                border: selectedRole === 'tech' ? '3px solid #ea580c' : '2px solid #cbd5e1',
-                                background: selectedRole === 'tech' ? '#fff7ed' : 'white',
-                                borderRadius: '15px',
-                                cursor: 'pointer',
-                                transition: 'all 0.3s',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                gap: '8px',
-                                fontWeight: selectedRole === 'tech' ? '700' : '600',
-                                color: selectedRole === 'tech' ? '#ea580c' : '#475569',
-                                fontSize: '0.95rem'
-                            }}
-                        >
-                            <Wrench size={20} />
-                            {t("technician")}
-                        </button>
+            <div className="login-card-container">
+                {/* Brand Header */}
+                <div className="login-header">
+                    <div className="login-logo-wrap">
+                        <picture>
+                            <source srcSet={logoWebP} type="image/webp" />
+                            <OptimizedImage src={logo} alt="Fixsy Logo" />
+                        </picture>
                     </div>
-                </fieldset>
 
-                {/* Email/Password Form */}
-                <form onSubmit={handleEmailSubmit} style={{ marginBottom: '20px', textAlign: 'left' }}>
-                    {/* Name Input (Sign Up Only) */}
+                    <div className="login-title-row">
+                        <h1 className="login-title">Fixsy</h1>
+                        <span className="login-version-badge">v2.4 PRO</span>
+                    </div>
+                    <p className="login-subtitle">{t("loginSubtitle") || "منصة خدمات الصيانة المنزلية الذكية"}</p>
+                </div>
+
+                {/* Role Switcher */}
+                <div className="role-tabs-container" role="radiogroup" aria-label="اختر صفة الحساب">
+                    <button
+                        type="button"
+                        onClick={() => setSelectedRole('client')}
+                        role="radio"
+                        aria-checked={selectedRole === 'client'}
+                        className={`role-tab-btn ${selectedRole === 'client' ? 'active client' : ''}`}
+                    >
+                        <User size={18} />
+                        <span>{t("client") || "عميل"}</span>
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => setSelectedRole('tech')}
+                        role="radio"
+                        aria-checked={selectedRole === 'tech'}
+                        className={`role-tab-btn ${selectedRole === 'tech' ? 'active tech' : ''}`}
+                    >
+                        <Wrench size={18} />
+                        <span>{t("technician") || "فني معتمد"}</span>
+                    </button>
+                </div>
+
+                {/* Email / Password Form */}
+                <form onSubmit={handleEmailSubmit} className="login-form">
+                    {/* Full Name (Sign Up Only) */}
                     {isSignUp && (
-                        <div style={{ marginBottom: '15px' }}>
-                            <label style={{ display: 'block', marginBottom: '8px', fontWeight: '700', color: '#1e293b', fontSize: '0.9rem' }}>
+                        <div className="form-group">
+                            <label className="form-label">
                                 {t("fullName") || "الاسم الكامل"}
                             </label>
-                            <div style={{ position: 'relative' }}>
-                                <User size={18} style={{ position: 'absolute', left: language === 'ar' ? 'auto' : '12px', right: language === 'ar' ? '12px' : 'auto', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)' }} />
+                            <div className="form-input-wrap">
+                                <User size={18} className="input-icon-start" />
                                 <input
                                     type="text"
                                     name="name"
                                     value={formData.name}
                                     onChange={handleChange}
-                                    placeholder={t("enterName") || "أدخل اسمك"}
-                                    style={{
-                                        width: '100%',
-                                        padding: '12px',
-                                        paddingLeft: language === 'ar' ? '12px' : '40px',
-                                        paddingRight: language === 'ar' ? '40px' : '12px',
-                                        border: '2px solid #cbd5e1',
-                                        borderRadius: '12px',
-                                        fontSize: '1rem',
-                                        fontFamily: 'inherit',
-                                        color: '#1e293b',
-                                        fontWeight: '500'
-                                    }}
+                                    placeholder={t("enterName") || "أدخل اسمك الكريم"}
+                                    className="form-input"
+                                    required
                                 />
                             </div>
                         </div>
                     )}
 
                     {/* Email Input */}
-                    <div style={{ marginBottom: '15px' }}>
-                        <label style={{ display: 'block', marginBottom: '8px', fontWeight: '700', color: '#1e293b', fontSize: '0.9rem' }}>
+                    <div className="form-group">
+                        <label className="form-label">
                             {t("email") || "البريد الإلكتروني"}
                         </label>
-                        <div style={{ position: 'relative' }}>
-                            <Mail size={18} style={{ position: 'absolute', left: language === 'ar' ? 'auto' : '12px', right: language === 'ar' ? '12px' : 'auto', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)' }} />
+                        <div className="form-input-wrap">
+                            <Mail size={18} className="input-icon-start" />
                             <input
                                 type="email"
                                 name="email"
                                 value={formData.email}
                                 onChange={handleChange}
-                                placeholder={t("enterEmail") || "أدخل بريدك الإلكتروني"}
-                                style={{
-                                    width: '100%',
-                                    padding: '12px',
-                                    paddingLeft: language === 'ar' ? '12px' : '40px',
-                                    paddingRight: language === 'ar' ? '40px' : '12px',
-                                    border: '2px solid #cbd5e1',
-                                    borderRadius: '12px',
-                                    fontSize: '1rem',
-                                    fontFamily: 'inherit',
-                                    color: '#1e293b',
-                                    fontWeight: '500'
-                                }}
+                                placeholder="name@example.com"
+                                className="form-input"
+                                required
                             />
                         </div>
                     </div>
 
                     {/* Password Input */}
-                    <div style={{ marginBottom: '20px' }}>
-                        <label style={{ display: 'block', marginBottom: '8px', fontWeight: '700', color: '#1e293b', fontSize: '0.9rem' }}>
+                    <div className="form-group">
+                        <label className="form-label">
                             {t("password") || "كلمة المرور"}
                         </label>
-                        <div style={{ position: 'relative' }}>
-                            <Lock size={18} style={{ position: 'absolute', left: language === 'ar' ? 'auto' : '12px', right: language === 'ar' ? '12px' : 'auto', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-secondary)' }} />
+                        <div className="form-input-wrap">
+                            <Lock size={18} className="input-icon-start" />
                             <input
                                 type={showPassword ? 'text' : 'password'}
                                 name="password"
                                 value={formData.password}
                                 onChange={handleChange}
-                                placeholder={t("enterPassword") || "أدخل كلمة المرور"}
-                                style={{
-                                    width: '100%',
-                                    padding: '12px',
-                                    paddingLeft: language === 'ar' ? '40px' : '40px',
-                                    paddingRight: language === 'ar' ? '40px' : '40px',
-                                    border: '2px solid #cbd5e1',
-                                    borderRadius: '12px',
-                                    fontSize: '1rem',
-                                    fontFamily: 'inherit',
-                                    color: '#1e293b',
-                                    fontWeight: '500'
-                                }}
+                                placeholder="••••••••"
+                                className="form-input has-pwd-toggle"
+                                required
                             />
                             <button
                                 type="button"
                                 onClick={() => setShowPassword(!showPassword)}
-                                style={{
-                                    position: 'absolute',
-                                    right: language === 'ar' ? 'auto' : '12px',
-                                    left: language === 'ar' ? '12px' : 'auto',
-                                    top: '50%',
-                                    transform: 'translateY(-50%)',
-                                    background: 'none',
-                                    border: 'none',
-                                    cursor: 'pointer',
-                                    padding: '4px',
-                                    color: 'var(--text-secondary)'
-                                }}
+                                className="input-toggle-pwd"
+                                aria-label={showPassword ? "إخفاء كلمة المرور" : "إظهار كلمة المرور"}
                             >
                                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                             </button>
@@ -289,162 +248,120 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, onEmailLogin, onEmailSig
                     <button
                         type="submit"
                         disabled={isLoading}
-                        className="hover-scale"
-                        style={{
-                            width: '100%',
-                            padding: '16px',
-                            background: 'linear-gradient(135deg, #0056D2 0%, #0047AB 100%)',
-                            color: 'white',
-                            border: 'none',
-                            borderRadius: '15px',
-                            fontSize: '1.05rem',
-                            fontWeight: '700',
-                            cursor: isLoading ? 'not-allowed' : 'pointer',
-                            opacity: isLoading ? 0.7 : 1,
-                            transition: 'all 0.3s',
-                            boxShadow: '0 4px 15px rgba(0, 86, 210, 0.3)'
-                        }}
+                        className="btn-submit-primary"
                     >
-                        {isLoading ? '⏳ جاري التحميل...' : (isSignUp ? (t("signUp") || "إنشاء حساب") : (t("login") || "تسجيل الدخول"))}
+                        {isLoading ? (
+                            <span>جاري التحميل...</span>
+                        ) : (
+                            <>
+                                <span>
+                                    {isSignUp
+                                        ? (t("createAccount") || "إنشاء حساب جديد")
+                                        : (t("login") || "تسجيل الدخول")}
+                                </span>
+                                {language === 'ar' ? <ArrowLeft size={18} /> : <ArrowRight size={18} />}
+                            </>
+                        )}
                     </button>
                 </form>
 
-                {/* Toggle Sign Up / Login */}
+                {/* Switch between Login and Sign Up */}
                 <button
+                    type="button"
                     onClick={() => setIsSignUp(!isSignUp)}
-                    style={{
-                        background: 'none',
-                        border: 'none',
-                        color: '#0056D2',
-                        cursor: 'pointer',
-                        fontSize: '0.95rem',
-                        marginBottom: '20px',
-                        textDecoration: 'underline',
-                        fontWeight: '600'
-                    }}
+                    className="switch-mode-btn"
                 >
-                    {isSignUp ? (t("alreadyHaveAccount") || "لديك حساب؟ سجل دخول") : (t("dontHaveAccount") || "ليس لديك حساب؟ أنشئ حساب")}
+                    {isSignUp
+                        ? (t("alreadyHaveAccount") || "لديك حساب بالفعل؟ تسجيل الدخول")
+                        : (t("dontHaveAccount") || "ليس لديك حساب؟ إنشاء حساب جديد")}
                 </button>
 
                 {/* Divider */}
-                <div style={{ display: 'flex', alignItems: 'center', margin: '20px 0', color: '#64748b' }}>
-                    <div style={{ flex: 1, height: '1px', background: '#cbd5e1' }}></div>
-                    <span style={{ padding: '0 10px', fontSize: '0.85rem', fontWeight: '600' }}>{t("or") || "أو"}</span>
-                    <div style={{ flex: 1, height: '1px', background: '#cbd5e1' }}></div>
+                <div className="login-divider">
+                    <span>{t("or") || "أو"}</span>
                 </div>
 
                 {/* Google Login Button */}
                 <button
+                    type="button"
                     onClick={handleGoogleLoginClick}
-                    className="hover-scale"
-                    style={{
-                        width: '100%',
-                        padding: '15px',
-                        background: 'white',
-                        border: '2px solid #cbd5e1',
-                        borderRadius: '15px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: '10px',
-                        fontSize: '1rem',
-                        fontWeight: '600',
-                        color: '#1e293b',
-                        cursor: 'pointer',
-                        transition: 'all 0.3s',
-                        boxShadow: '0 2px 10px rgba(0,0,0,0.05)'
-                    }}
+                    className="btn-google-auth"
+                    aria-label="تسجيل الدخول باستخدام حساب Google"
                 >
-                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" style={{ width: '20px', height: '20px' }} />
-                    {t("continueWithGoogle") || "المتابعة باستخدام Google"}
+                    <svg className="google-icon" viewBox="0 0 24 24" width="20" height="20">
+                        <path
+                            fill="#4285F4"
+                            d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"
+                        />
+                        <path
+                            fill="#34A853"
+                            d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"
+                        />
+                        <path
+                            fill="#FBBC05"
+                            d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"
+                        />
+                        <path
+                            fill="#EA4335"
+                            d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"
+                        />
+                    </svg>
+                    <span>{t("continueWithGoogle") || "المتابعة باستخدام Google"}</span>
                 </button>
-                {/* Quick 1-Click Demo Mode Card */}
-                <div style={{
-                    marginTop: '22px',
-                    padding: '16px',
-                    borderRadius: '18px',
-                    background: 'linear-gradient(135deg, rgba(239, 246, 255, 0.95) 0%, rgba(240, 253, 244, 0.95) 100%)',
-                    border: '1.5px dashed #3b82f6',
-                    textAlign: 'center'
-                }}>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginBottom: '6px' }}>
-                        <Sparkles size={18} color="#2563eb" />
-                        <span style={{ fontWeight: '800', color: '#1e40af', fontSize: '0.92rem' }}>
+
+                {/* VIP 1-Click Demo Mode Card */}
+                <div className="demo-mode-card">
+                    <div className="demo-header">
+                        <span className="demo-title">
+                            <Sparkles size={16} />
                             {t("quickDemoTitle") || "🚀 تجربة سريعة بدون تسجيل (Demo Mode)"}
                         </span>
                     </div>
-                    <p style={{ fontSize: '0.78rem', color: '#475569', marginBottom: '12px' }}>
+                    <p className="demo-subtitle">
                         {t("quickDemoSubtitle") || "اختر الدور لتجربة كامل ميزات المنصة فوراً بنقرة واحدة:"}
                     </p>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
+
+                    <div className="demo-roles-grid">
+                        {/* Client Demo */}
                         <button
                             type="button"
-                            onClick={() => onGuestLogin ? onGuestLogin('client') : null}
-                            className="hover-scale"
-                            style={{
-                                padding: '10px 4px',
-                                borderRadius: '12px',
-                                border: '1px solid #93c5fd',
-                                background: 'white',
-                                color: '#1d4ed8',
-                                fontWeight: '700',
-                                fontSize: '0.8rem',
-                                cursor: 'pointer',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                gap: '4px',
-                                boxShadow: '0 2px 6px rgba(37, 99, 235, 0.1)'
-                            }}
+                            onClick={() => handleDemoSelect('client')}
+                            className="demo-role-btn client-demo"
+                            title="دخول فوري كعميل تجريبي"
                         >
-                            <User size={18} />
-                            <span>{t("clientDemo") || "عميل تجريبي"}</span>
+                            <div className="demo-icon-circle">
+                                <User size={18} />
+                            </div>
+                            <span className="demo-role-label">{t("clientDemo") || "عميل تجريبي"}</span>
+                            <span className="demo-role-tag">طلب خدمات</span>
                         </button>
+
+                        {/* Tech Demo */}
                         <button
                             type="button"
-                            onClick={() => onGuestLogin ? onGuestLogin('tech') : null}
-                            className="hover-scale"
-                            style={{
-                                padding: '10px 4px',
-                                borderRadius: '12px',
-                                border: '1px solid #fed7aa',
-                                background: 'white',
-                                color: '#c2410c',
-                                fontWeight: '700',
-                                fontSize: '0.8rem',
-                                cursor: 'pointer',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                gap: '4px',
-                                boxShadow: '0 2px 6px rgba(194, 65, 12, 0.1)'
-                            }}
+                            onClick={() => handleDemoSelect('tech')}
+                            className="demo-role-btn tech-demo"
+                            title="دخول فوري كفني معتمد"
                         >
-                            <Wrench size={18} />
-                            <span>{t("techDemo") || "فني تجريبي"}</span>
+                            <div className="demo-icon-circle">
+                                <Wrench size={18} />
+                            </div>
+                            <span className="demo-role-label">{t("techDemo") || "فني معتمد"}</span>
+                            <span className="demo-role-tag">سوق العمل</span>
                         </button>
+
+                        {/* Admin Demo */}
                         <button
                             type="button"
-                            onClick={() => onGuestLogin ? onGuestLogin('admin') : null}
-                            className="hover-scale"
-                            style={{
-                                padding: '10px 4px',
-                                borderRadius: '12px',
-                                border: '1px solid #e9d5ff',
-                                background: 'white',
-                                color: '#7e22ce',
-                                fontWeight: '700',
-                                fontSize: '0.8rem',
-                                cursor: 'pointer',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                gap: '4px',
-                                boxShadow: '0 2px 6px rgba(126, 34, 206, 0.1)'
-                            }}
+                            onClick={() => handleDemoSelect('admin')}
+                            className="demo-role-btn admin-demo"
+                            title="دخول فوري كمسؤول المنصة"
                         >
-                            <ShieldCheck size={18} />
-                            <span>{t("adminDemo") || "أدمن المنصة"}</span>
+                            <div className="demo-icon-circle">
+                                <ShieldCheck size={18} />
+                            </div>
+                            <span className="demo-role-label">{t("adminDemo") || "إدارة المنصة"}</span>
+                            <span className="demo-role-tag">تحكم شامل</span>
                         </button>
                     </div>
                 </div>
