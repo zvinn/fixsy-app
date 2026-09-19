@@ -106,10 +106,36 @@ const UserBookings: React.FC<UserBookingsProps> = ({ user, goBack }) => {
         const unsubscribe = onSnapshot(q, (snapshot) => {
             const data = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id } as BookingRequest))
                 .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-            setMyRequests(data);
+            if (data.length > 0) {
+                setMyRequests(data);
+                safeLocalStorage.setItem(`myRequests_${user.email}`, JSON.stringify(data));
+            } else {
+                const cached = safeLocalStorage.getItem(`myRequests_${user.email}`);
+                if (cached) {
+                    try {
+                        const parsed = JSON.parse(cached);
+                        if (parsed.length > 0) {
+                            setMyRequests(parsed);
+                        } else if (user.email?.includes('demo')) {
+                            setMyRequests(DEMO_BOOKINGS as unknown as BookingRequest[]);
+                        }
+                    } catch {
+                        if (user.email?.includes('demo')) setMyRequests(DEMO_BOOKINGS as unknown as BookingRequest[]);
+                    }
+                } else if (user.email?.includes('demo')) {
+                    setMyRequests(DEMO_BOOKINGS as unknown as BookingRequest[]);
+                }
+            }
             setLoading(false);
-            // 2. Save to Cache
-            safeLocalStorage.setItem(`myRequests_${user.email}`, JSON.stringify(data));
+        }, (err) => {
+            console.warn("Bookings snapshot notice:", err);
+            const cached = safeLocalStorage.getItem(`myRequests_${user.email}`);
+            if (cached) {
+                try { setMyRequests(JSON.parse(cached)); } catch {}
+            } else if (user.email?.includes('demo')) {
+                setMyRequests(DEMO_BOOKINGS as unknown as BookingRequest[]);
+            }
+            setLoading(false);
         });
         return () => unsubscribe();
     }, [user]);

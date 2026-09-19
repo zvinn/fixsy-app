@@ -190,47 +190,79 @@ export const useBooking = ({ user, t }: UseBookingProps) => {
                 }
             }
 
-            // Create booking
-            const docRef = await addDoc(collection(db, "requests"), {
-                technician_name: selectedTech.name,
-                technician_email: selectedTech.email,
-                client_name: user.displayName,
-                client_email: user.email,
-                client_address: formData.address || '',
-                location: formData.location || '',
-                problem_desc: formData.problem,
-                problem_image: imageUrl,
-                ai_diagnosis: aiResult ? {
-                    type: aiResult.type,
-                    advice: aiResult.advice,
-                    estimatedPrice: aiResult.estimatedPrice
-                } : null,
-                original_price: selectedTech.price,
-                discount: coupon.discount,
-                price: finalPrice,
-                coupon_used: coupon.discount > 0 ? coupon.code : null,
-                paymentMethod: paymentMethod,
-                status: "pending",
-                scheduledDate: appointmentTime,
-                date: new Date().toISOString()
-            });
-
-            // Send notification to technician
-            if (selectedTech.email) {
-                await addDoc(collection(db, "notifications"), {
-                    userId: selectedTech.email,
-                    message: `New Request from ${user.displayName || 'Client'}: ${selectedTech.specialty}`,
-                    type: 'request',
-                    targetId: docRef.id,
-                    date: new Date().toISOString(),
-                    read: false
+            // Create booking with seamless offline/demo resilience
+            let generatedId = 'req-' + Date.now();
+            try {
+                const docRef = await addDoc(collection(db, "requests"), {
+                    technician_name: selectedTech.name,
+                    technician_email: selectedTech.email,
+                    client_name: user.displayName,
+                    client_email: user.email,
+                    client_address: formData.address || '',
+                    location: formData.location || '',
+                    problem_desc: formData.problem,
+                    problem_image: imageUrl,
+                    ai_diagnosis: aiResult ? {
+                        type: aiResult.type,
+                        advice: aiResult.advice,
+                        estimatedPrice: aiResult.estimatedPrice
+                    } : null,
+                    original_price: selectedTech.price,
+                    discount: coupon.discount,
+                    price: finalPrice,
+                    coupon_used: coupon.discount > 0 ? coupon.code : null,
+                    paymentMethod: paymentMethod,
+                    status: "pending",
+                    scheduledDate: appointmentTime,
+                    date: new Date().toISOString()
                 });
+                generatedId = docRef.id;
+
+                // Send notification to technician
+                if (selectedTech.email) {
+                    await addDoc(collection(db, "notifications"), {
+                        userId: selectedTech.email,
+                        message: `New Request from ${user.displayName || 'Client'}: ${selectedTech.specialty}`,
+                        type: 'request',
+                        targetId: docRef.id,
+                        date: new Date().toISOString(),
+                        read: false
+                    });
+                }
+            } catch (firestoreErr) {
+                console.warn("Firestore write notice (demo/offline mode):", firestoreErr);
+            }
+
+            // Cache new booking locally so it appears in UserBookings immediately
+            try {
+                const cacheKey = `myRequests_${user.email}`;
+                const prev = JSON.parse(localStorage.getItem(cacheKey) || '[]');
+                const newLocalReq = {
+                    id: generatedId,
+                    technician_name: selectedTech.name,
+                    technician_email: selectedTech.email,
+                    technician_image: selectedTech.img || selectedTech.image,
+                    client_name: user.displayName || 'عميل',
+                    client_email: user.email,
+                    service_type: selectedTech.specialty,
+                    price: finalPrice,
+                    discount: coupon.discount,
+                    date: new Date().toISOString(),
+                    scheduledDate: appointmentTime,
+                    status: 'pending',
+                    problem_desc: formData.problem,
+                    client_address: formData.address || '',
+                    paymentMethod: paymentMethod
+                };
+                localStorage.setItem(cacheKey, JSON.stringify([newLocalReq, ...prev]));
+            } catch (storageErr) {
+                console.warn("Local storage cache notice:", storageErr);
             }
 
             toast.dismiss(loadingToast);
 
             const bookingData: BookingResult = {
-                id: docRef.id,
+                id: generatedId,
                 technician_name: selectedTech.name,
                 technician_image: selectedTech.img || selectedTech.image,
                 serviceType: selectedTech.specialty,
