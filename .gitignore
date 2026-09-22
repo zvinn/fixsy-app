@@ -44,3 +44,12 @@ build/
 .snapshots/
 .DS_Store
 Thumbs.db
+
+# Scratch and verification scripts
+src/verify-*.js
+src/verify-*.ts
+src/test-*.js
+src/test-*.ts
+src/list-*.js
+src/list-*.ts
+scripts/scratch/

@@ -2,13 +2,13 @@ const { initializeApp } = require("firebase/app");
 const { getFirestore, collection, addDoc } = require("firebase/firestore");
 
 const firebaseConfig = {
-    apiKey: "AIzaSyDe--mP0szbc4n2U1ywQB6QaPV9NKv8Pe0",
-    authDomain: "fixsy-fefcb.firebaseapp.com",
-    projectId: "fixsy-fefcb",
-    storageBucket: "fixsy-fefcb.firebasestorage.app",
-    messagingSenderId: "688567914798",
-    appId: "1:688567914798:web:f9a87a545015a9a837aabf",
-    measurementId: "G-R62C56SY2T"
+    apiKey: process.env.VITE_FIREBASE_API_KEY || process.env.FIREBASE_API_KEY || "demo-api-key",
+    authDomain: process.env.VITE_FIREBASE_AUTH_DOMAIN || "fixsy-fefcb.firebaseapp.com",
+    projectId: process.env.VITE_FIREBASE_PROJECT_ID || "fixsy-fefcb",
+    storageBucket: process.env.VITE_FIREBASE_STORAGE_BUCKET || "fixsy-fefcb.firebasestorage.app",
+    messagingSenderId: process.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "688567914798",
+    appId: process.env.VITE_FIREBASE_APP_ID || "1:688567914798:web:demo",
+    measurementId: process.env.VITE_FIREBASE_MEASUREMENT_ID || "G-R62C56SY2T"
 };
 
 const app = initializeApp(firebaseConfig);
