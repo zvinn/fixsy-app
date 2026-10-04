@@ -6,8 +6,10 @@
   --text-primary: #1e293b;
   --text-secondary: #64748b;
   --text-tertiary: #94a3b8;
-  --primary: #2563EB;
-  --primary-light: #EFF6FF;
+  --primary: #1e3a8a;
+  --primary-light: #3b82f6;
+  --secondary: #ff6b00;
+  --accent: #ff6b00;
   --border: #e2e8f0;
   /* Radii System */
   --radius-sm: 8px;
@@ -24,9 +26,9 @@
   --glass: rgba(255, 255, 255, 0.7);
   --glass-border: rgba(255, 255, 255, 0.4);
 
-  --danger: #EF4444;
-  --warning: #F59E0B;
-  --success: #10B981;
+  --danger: #ef4444;
+  --warning: #f59e0b;
+  --success: #10b981;
 }
 
 [data-theme='dark'] {
@@ -55,7 +57,9 @@
 body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 .glass-panel {

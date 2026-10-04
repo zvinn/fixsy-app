@@ -24,7 +24,7 @@ import { useTechnicians } from './hooks/useTechnicians';
 import { useNotifications } from './hooks/useNotifications';
 import { useWeatherAlert } from './hooks/useWeatherAlert';
 import { useClientProfile } from './hooks/useClientProfile';
-import { BookingProvider, useBookingContext } from './context/BookingContext';  // NEW!
+import { BookingProvider, useBookingContext } from './context/BookingContext'; // NEW!
 
 // Types
 import { WeatherAlert } from './types';
@@ -32,16 +32,56 @@ import './components/HomeTab.css';
 import { analytics } from './services/analyticsService';
 import safeLocalStorage from './utils/safeLocalStorage';
 
-// Service icons configuration
+// Service icons configuration (Synchronized with Flutter redesign)
 const servicesList = [
-  { id: 'plumbing', icon: <Wrench size={28} />, color: '#0ea5e9', bg: '#e0f2fe' },
-  { id: 'electricity', icon: <Zap size={28} />, color: '#eab308', bg: '#fef9c3' },
-  { id: 'carpentry', icon: <Hammer size={28} />, color: '#8b5cf6', bg: '#ede9fe' },
-  { id: 'ac', icon: <Wind size={28} />, color: '#10b981', bg: '#d1fae5' },
-  { id: 'painting', icon: <PaintRoller size={28} />, color: '#ec4899', bg: '#fce7f3' },
-  { id: 'appliances', icon: <Tv size={28} />, color: '#6366f1', bg: '#e0e7ff' },
-  { id: 'dish', icon: <Satellite size={28} />, color: '#f43f5e', bg: '#ffe4e6' },
-  { id: 'allServices', icon: <Grid size={28} />, color: '#64748b', bg: '#f1f5f9' }
+  {
+    id: 'plumbing',
+    icon: <Wrench size={28} />,
+    color: '#ffffff',
+    bg: 'linear-gradient(135deg, #3B82F6 0%, #1E3A8A 100%)',
+  },
+  {
+    id: 'electricity',
+    icon: <Zap size={28} />,
+    color: '#ffffff',
+    bg: 'linear-gradient(135deg, #FF6B00 0%, #E65100 100%)',
+  },
+  {
+    id: 'carpentry',
+    icon: <Hammer size={28} />,
+    color: '#ffffff',
+    bg: 'linear-gradient(135deg, #8B5CF6 0%, #5B21B6 100%)',
+  },
+  {
+    id: 'ac',
+    icon: <Wind size={28} />,
+    color: '#ffffff',
+    bg: 'linear-gradient(135deg, #10B981 0%, #047857 100%)',
+  },
+  {
+    id: 'painting',
+    icon: <PaintRoller size={28} />,
+    color: '#ffffff',
+    bg: 'linear-gradient(135deg, #EC4899 0%, #BE185D 100%)',
+  },
+  {
+    id: 'appliances',
+    icon: <Tv size={28} />,
+    color: '#ffffff',
+    bg: 'linear-gradient(135deg, #6366F1 0%, #4338CA 100%)',
+  },
+  {
+    id: 'dish',
+    icon: <Satellite size={28} />,
+    color: '#ffffff',
+    bg: 'linear-gradient(135deg, #F43F5E 0%, #BE123C 100%)',
+  },
+  {
+    id: 'allServices',
+    icon: <Grid size={28} />,
+    color: '#ffffff',
+    bg: 'linear-gradient(135deg, #64748B 0%, #334155 100%)',
+  },
 ];
 
 function App() {
@@ -60,7 +100,7 @@ function App() {
 function AppContent() {
   const { theme, toggleTheme } = useTheme();
   const { language, t } = useLanguage();
-  const { user } = useAuth(t);  // Get user first
+  const { user } = useAuth(t); // Get user first
 
   return (
     <BookingProvider user={user} t={t}>
@@ -75,19 +115,33 @@ function AppContentInner() {
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Auth Hook
-  const { user, userRole, setUserRole, registerAsClient, handleGoogleLogin, handleEmailSignUp, handleEmailLogin, handleGuestLogin, applyReferralCode } = useAuth(t);
+  const {
+    user,
+    userRole,
+    setUserRole,
+    registerAsClient,
+    handleGoogleLogin,
+    handleEmailSignUp,
+    handleEmailLogin,
+    handleGuestLogin,
+    applyReferralCode,
+  } = useAuth(t);
 
   // Local State
   const [showSplash, setShowSplash] = useState(() => {
     try {
-      if (window.location.search.includes('demo=') || window.location.search.includes('nosplash=true')) return false;
+      if (
+        window.location.search.includes('demo=') ||
+        window.location.search.includes('nosplash=true')
+      )
+        return false;
       return !sessionStorage.getItem('fixsy_splash_shown');
     } catch {
       return false;
     }
   });
   const [activeTab, setActiveTab] = useState('home');
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
   const [weatherAlertState, setWeatherAlertState] = useState<WeatherAlert | null>(null);
 
   // Custom Hooks - MUST be called before any conditional returns
@@ -98,7 +152,7 @@ function AppContentInner() {
   const { favorites, toggleFavorite } = useFavorites(user);
 
   // Booking is now in Context - no hook needed here!
-  const booking = useBookingContext();  // Use context instead!
+  const booking = useBookingContext(); // Use context instead!
 
   // AI Modal State
   const [showAIModal, setShowAIModal] = useState(false);
@@ -133,9 +187,18 @@ function AppContentInner() {
     await booking.submitBooking(e, aiAnalysis.aiResult ?? undefined);
   };
 
-  const onVoiceInput = () => handleVoiceInput((transcript: string) => aiAnalysis.setAiQuery(transcript));
-  const onApplySuggestion = () => aiAnalysis.applyAISuggestion(setSearchTerm, () => setShowAIModal(false));
-  const onSmartBook = () => aiAnalysis.handleSmartBook(technicians, serviceMap, booking.setSelectedTech, booking.setFormData, () => setShowAIModal(false));
+  const onVoiceInput = () =>
+    handleVoiceInput((transcript: string) => aiAnalysis.setAiQuery(transcript));
+  const onApplySuggestion = () =>
+    aiAnalysis.applyAISuggestion(setSearchTerm, () => setShowAIModal(false));
+  const onSmartBook = () =>
+    aiAnalysis.handleSmartBook(
+      technicians,
+      serviceMap,
+      booking.setSelectedTech,
+      booking.setFormData,
+      () => setShowAIModal(false)
+    );
 
   // Login Check
   if (!user && !safeLocalStorage.getItem('skipLogin')) {
@@ -154,40 +217,86 @@ function AppContentInner() {
 
   return (
     <div className="App">
-      {showSplash && <SplashScreen onComplete={() => {
-        try { sessionStorage.setItem('fixsy_splash_shown', 'true'); } catch {}
-        setTimeout(() => setShowSplash(false), 300);
-      }} />}
+      {showSplash && (
+        <SplashScreen
+          onComplete={() => {
+            try {
+              sessionStorage.setItem('fixsy_splash_shown', 'true');
+            } catch (_e) {
+              /* ignore storage error */
+            }
+            setTimeout(() => setShowSplash(false), 300);
+          }}
+        />
+      )}
 
       <MainLayout
-        activeTab={activeTab} setActiveTab={changeTab}
-        user={user} userRole={userRole}
-        theme={theme || 'light'} toggleTheme={toggleTheme} t={t}
-        searchTerm={searchTerm} setSearchTerm={setSearchTerm}
-        unreadCount={Number(unreadCount) || 0} isRinging={notificationRinging}
+        activeTab={activeTab}
+        setActiveTab={changeTab}
+        user={user}
+        userRole={userRole}
+        theme={theme || 'light'}
+        toggleTheme={toggleTheme}
+        t={t}
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        unreadCount={Number(unreadCount) || 0}
+        isRinging={notificationRinging}
         onNotificationsClick={() => setActiveTab('notifications')}
         onAIClick={() => setShowAIModal(true)}
         onLogin={handleGoogleLogin}
       >
         <AIAssistantModal
-          show={showAIModal} onClose={() => setShowAIModal(false)} t={t} language={language}
-          aiResult={aiAnalysis.aiResult} isAnalyzing={aiAnalysis.isAnalyzing} aiQuery={aiAnalysis.aiQuery} setAiQuery={aiAnalysis.setAiQuery}
-          aiImage={aiAnalysis.aiImage} setAiImage={aiAnalysis.setAiImage} isListening={isListening} onVoiceInput={onVoiceInput}
-          onImageSelect={aiAnalysis.handleAIImageSelect} onAnalyze={aiAnalysis.analyzeProblem} onApplySuggestion={onApplySuggestion}
-          onSmartBook={onSmartBook} onBroadcast={() => { }}
+          show={showAIModal}
+          onClose={() => setShowAIModal(false)}
+          t={t}
+          language={language}
+          aiResult={aiAnalysis.aiResult}
+          isAnalyzing={aiAnalysis.isAnalyzing}
+          aiQuery={aiAnalysis.aiQuery}
+          setAiQuery={aiAnalysis.setAiQuery}
+          aiImage={aiAnalysis.aiImage}
+          setAiImage={aiAnalysis.setAiImage}
+          isListening={isListening}
+          onVoiceInput={onVoiceInput}
+          onImageSelect={aiAnalysis.handleAIImageSelect}
+          onAnalyze={aiAnalysis.analyzeProblem}
+          onApplySuggestion={onApplySuggestion}
+          onSmartBook={onSmartBook}
+          onBroadcast={() => {}}
           onClearResult={aiAnalysis.clearAIResult}
         />
 
         <AppRoutes
-          activeTab={activeTab} changeTab={changeTab} user={user} userRole={userRole} setUserRole={handleSetUserRole}
-          t={t} theme={theme} toggleTheme={toggleTheme} weatherAlert={weatherAlertState} setWeatherAlert={setWeatherAlertState}
-          servicesList={servicesList} searchTerm={searchTerm} setSearchTerm={setSearchTerm}
-          technicians={technicians} isLoadingTechs={isLoadingTechs} serviceMap={serviceMap}
-          selectedTech={booking.selectedTech} setSelectedTech={booking.setSelectedTech} favorites={favorites} toggleFavorite={toggleFavorite}
-          handleBookingSubmit={handleBookingSubmit} clientProfile={clientProfile} language={language}
-          registerAsClient={registerAsClient} applyReferralCode={applyReferralCode}
+          activeTab={activeTab}
+          changeTab={changeTab}
+          user={user}
+          userRole={userRole}
+          setUserRole={handleSetUserRole}
+          t={t}
+          theme={theme}
+          toggleTheme={toggleTheme}
+          weatherAlert={weatherAlertState}
+          setWeatherAlert={setWeatherAlertState}
+          servicesList={servicesList}
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          technicians={technicians}
+          isLoadingTechs={isLoadingTechs}
+          serviceMap={serviceMap}
+          selectedTech={booking.selectedTech}
+          setSelectedTech={booking.setSelectedTech}
+          favorites={favorites}
+          toggleFavorite={toggleFavorite}
+          handleBookingSubmit={handleBookingSubmit}
+          clientProfile={clientProfile}
+          language={language}
+          registerAsClient={registerAsClient}
+          applyReferralCode={applyReferralCode}
           containerRef={containerRef as React.RefObject<HTMLDivElement>}
-          handleEmailSignUp={handleEmailSignUp} handleEmailLogin={handleEmailLogin} handleGoogleLogin={handleGoogleLogin}
+          handleEmailSignUp={handleEmailSignUp}
+          handleEmailLogin={handleEmailLogin}
+          handleGoogleLogin={handleGoogleLogin}
         />
 
         {/* Booking Success Modal */}
@@ -195,7 +304,10 @@ function AppContentInner() {
           <BookingSuccess
             details={booking.lastBookingDetails}
             onClose={booking.resetBooking}
-            onTrack={() => { booking.resetBooking(); changeTab('my_requests'); }}
+            onTrack={() => {
+              booking.resetBooking();
+              changeTab('my_requests');
+            }}
           />
         )}
       </MainLayout>
