@@ -67,8 +67,8 @@
   width: 100%;
   max-width: 460px;
   background: rgba(15, 23, 42, 0.85);
-  backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(24px);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 28px;
   padding: 34px 28px;
@@ -396,6 +396,7 @@
   justify-content: center;
   gap: 12px;
   transition: all 0.25s ease;
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
 }
 
