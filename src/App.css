@@ -1,7 +1,6 @@
 /* 🎨 Fixsy App Styles - Using Design System v2.0 */
 /* Design System files are imported in index.css */
 
-
 /* ============================================
    📱 APP SPECIFIC STYLES
    ============================================ */
@@ -75,7 +74,7 @@
 }
 
 .hero-title-accent {
-  color: #93C5FD;
+  color: #93c5fd;
 }
 
 /* Search Container */
@@ -109,7 +108,7 @@
 }
 
 .ai-search-btn {
-  background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
   border: none;
   border-radius: var(--border-radius-md);
   padding: var(--space-3) var(--space-5);
@@ -131,16 +130,16 @@
 /* 🧼 Glassmorphism Classes */
 .glass-panel {
   background: var(--surface);
-  backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
   border: 1px solid var(--border);
   box-shadow: var(--shadow-sm);
 }
 
 .glass-card {
   background: var(--glass);
-  backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
   border: 1px solid var(--border);
   border-radius: 20px;
   box-shadow: var(--shadow-sm);
@@ -400,7 +399,12 @@
 /* Skeleton Loading Animation */
 .skeleton-card {
   height: 120px;
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0.4) 25%, rgba(255, 255, 255, 0.7) 50%, rgba(255, 255, 255, 0.4) 75%);
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.4) 25%,
+    rgba(255, 255, 255, 0.7) 50%,
+    rgba(255, 255, 255, 0.4) 75%
+  );
   background-size: 200% 100%;
   animation: skeleton-loading 1.5s infinite;
   border-radius: 24px;
@@ -419,10 +423,10 @@
   }
 }
 .whatsapp-float-btn {
-    right: 20px;
+  right: 20px;
 }
 @media (min-width: 1200px) {
-    .whatsapp-float-btn {
-        right: max(24px, calc(50% - 590px)) !important;
-    }
+  .whatsapp-float-btn {
+    right: max(24px, calc(50% - 590px)) !important;
+  }
 }
