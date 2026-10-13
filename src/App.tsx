@@ -167,10 +167,16 @@ function AppContentInner() {
     }
   }, [weatherAlert]);
 
-  // Role Redirect
+  // Role Redirect - use ref to avoid setState in effect
+  const userRoleRef = useRef(userRole);
+  const activeTabRef = useRef(activeTab);
+  userRoleRef.current = userRole;
+  activeTabRef.current = activeTab;
+
   useEffect(() => {
-    if (userRole === 'admin' && activeTab === 'home') setActiveTab('admin');
-    else if (userRole === 'tech' && activeTab === 'home') setActiveTab('market');
+    if (userRoleRef.current === 'admin' && activeTabRef.current === 'home') setActiveTab('admin');
+    else if (userRoleRef.current === 'tech' && activeTabRef.current === 'home')
+      setActiveTab('market');
   }, [userRole, activeTab]);
 
   // Track page views (tab changes)
