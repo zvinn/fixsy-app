@@ -21,6 +21,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import RequestSkeleton from '../components/RequestSkeleton';
+import ChatWindow from '../components/ChatWindow';
 import { User } from 'firebase/auth';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
@@ -292,6 +293,7 @@ const JobMarket: React.FC<JobMarketProps> = ({ user, userRole, goBack: _goBack }
   // Offer Submission State
   const [selectedJobId, setSelectedJobId] = useState<string | null>(null);
   const [offerPrice, setOfferPrice] = useState<string>('');
+  const [chatRequestId, setChatRequestId] = useState<string | null>(null);
 
   // Post Job Form State (for clients)
   const [newJob, setNewJob] = useState({
@@ -421,6 +423,23 @@ const JobMarket: React.FC<JobMarketProps> = ({ user, userRole, goBack: _goBack }
       const updatedOffers = [...(job.offers || []), newOffer];
       await updateDoc(jobRef, { offers: updatedOffers });
 
+      // Real-time notification for the client
+      if (job.client_email) {
+        try {
+          await addDoc(collection(db, 'notifications'), {
+            recipientEmail: job.client_email,
+            title: 'عرض سعر جديد على طلبك! 💼',
+            message: `قدّم الفني ${newOffer.tech_name} عرض سعر بقيمة ${newOffer.price} ج.م على طلب "${job.title}"`,
+            type: 'market_offer',
+            jobId: job.id,
+            createdAt: new Date().toISOString(),
+            read: false,
+          });
+        } catch {
+          // notification write failure is non-blocking
+        }
+      }
+
       toast.success(t('offerSubmitted') || 'تم إرسال عرضك بنجاح للعميل! 💼');
       setSelectedJobId(null);
       setOfferPrice('');
@@ -432,7 +451,7 @@ const JobMarket: React.FC<JobMarketProps> = ({ user, userRole, goBack: _goBack }
   // 4. Accept Offer (Client)
   const acceptOffer = async (job: MarketJob, offer: Offer) => {
     try {
-      await addDoc(collection(db, 'requests'), {
+      const newReqRef = await addDoc(collection(db, 'requests'), {
         technician_name: offer.tech_name,
         technician_email: offer.tech_email,
         client_name: user.displayName || t('client') || 'عميل',
@@ -445,7 +464,27 @@ const JobMarket: React.FC<JobMarketProps> = ({ user, userRole, goBack: _goBack }
         date: new Date().toISOString(),
       });
       await updateDoc(doc(db, 'market_jobs', job.id), { status: 'closed' });
+
+      // Real-time notification for the technician
+      if (offer.tech_email) {
+        try {
+          await addDoc(collection(db, 'notifications'), {
+            recipientEmail: offer.tech_email,
+            title: 'تم قبول عرضك! 🎉',
+            message: `وافق العميل على عرضك بقيمة ${offer.price} ج.م لطلب "${job.title}"`,
+            type: 'offer_accepted',
+            jobId: job.id,
+            requestId: newReqRef.id,
+            createdAt: new Date().toISOString(),
+            read: false,
+          });
+        } catch {
+          // notification write failure is non-blocking
+        }
+      }
+
       toast.success(`${t('acceptedDeal') || 'تم قبول عرض الفني'} ${offer.tech_name} ✅`);
+      setChatRequestId(newReqRef.id);
     } catch {
       toast.error(t('errorOccurred') || 'حدث خطأ أثناء قبول العرض');
     }
@@ -589,6 +628,14 @@ const JobMarket: React.FC<JobMarketProps> = ({ user, userRole, goBack: _goBack }
           ))
         )}
       </div>
+
+      {chatRequestId && (
+        <ChatWindow
+          requestId={chatRequestId}
+          currentUser={user}
+          closeChat={() => setChatRequestId(null)}
+        />
+      )}
     </div>
   );
 };
